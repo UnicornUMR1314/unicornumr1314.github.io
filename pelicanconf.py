@@ -43,10 +43,10 @@ EXTRA_PATH_METADATA = {
 }
 
 # 文章URL结构
-ARTICLE_URL = 'posts/{slug}/'
-ARTICLE_SAVE_AS = 'posts/{slug}/index.html'
-PAGE_URL = 'pages/{slug}/'
-PAGE_SAVE_AS = 'pages/{slug}/index.html'
+# ARTICLE_URL = 'posts/{slug}/'
+# ARTICLE_SAVE_AS = 'posts/{slug}/index.html'
+# PAGE_URL = 'pages/{slug}/'
+# PAGE_SAVE_AS = 'pages/{slug}/index.html'
 
 # 启用Markdown扩展
 MARKDOWN = {
