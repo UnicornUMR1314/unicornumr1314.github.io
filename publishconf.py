@@ -25,6 +25,7 @@ DATE_FORMATS = {
 LOCALE = ['zh_CN.utf8', 'zh_CN.UTF-8']
 DEFAULT_DATE_FORMAT = '%Y年%m月%d日'
 
+THEME = "/pelican-themes/pelican-fh5co-marble"
 # Following items are often useful when publishing
 
 # DISQUS_SITENAME = ""
