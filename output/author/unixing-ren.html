@@ -1,245 +1,41 @@
 <!DOCTYPE html>
-<html lang="chinese (simplified)">
-        <head>
-                        <meta charset="utf-8" />
-                        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-                        <meta name="generator" content="Pelican" />
-                        <title>Uni星人的博客 - Uni星人</title>
-                        <link rel="stylesheet" href="/theme/css/main.css" />
-        </head>
+<html lang="zh_cn">
+  <head>
+      <title>Uni星人的博客 - Articles by Uni星人</title>
+      <meta charset="utf-8" />
+      <meta name="generator" content="Pelican" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
 
-        <body id="index" class="home">
-                <header id="banner" class="body">
-                        <h1><a href="/">Uni星人的博客</a></h1>
-                        <nav><ul>
-                                                <li><a href="/category/ji-zhu.html">技术</a></li>
-                        </ul></nav>
-                </header><!-- /#banner -->
+  <body>
+      <header>
+          <hgroup><h1><a href="/">Uni星人的博客</a></h1></hgroup>
+          <nav><ul>
+                <li><a href="/category/ji-zhu.html" >技术</a></li>
+          </ul></nav>
+      </header>
+      <main>
+    <h2>Articles by Uni星人</h2>
 
-                <aside id="featured" class="body">
-                    <article>
-                        <h1 class="entry-title"><a href="/my-second-post.html">我的第二篇博客文章</a></h1>
-<footer class="post-info">
-        <abbr class="published" title="2023-11-01T10:00:00+08:00">
-                Published: 周三 01 十一月 2023
-        </abbr>
 
-                <address class="vcard author">
-                        By                                 <a class="url fn" href="/author/unixing-ren.html">Uni星人</a>
+        <article>
+            <header> <h2><a href="/my-second-post.html" rel="bookmark" title="Permalink to 我的第二篇博客文章">我的第二篇博客文章</a></h2> </header>
+            <section><p>这是我使用Pelican创建的第二篇博客文章</p></section>
+            <footer>
+                <p>Published: <time datetime="2023-11-01T10:00:00+08:00"> 周三 01 十一月 2023 </time></p>
+                <address>By
+                        <a href="/author/unixing-ren.html">Uni星人</a>
                 </address>
-        <p>In <a href="/category/ji-zhu.html">技术</a>.</p>
-<p>tags: <a href="/tag/pelican.html">pelican</a> <a href="/tag/python.html">python</a> <a href="/tag/bo-ke.html">博客</a> </p>        
-</footer><!-- /.post-info --><h1>使用 Pelican + GitHub Actions 搭建自动化静态博客全攻略</h1>
-<h2>一、环境准备（Windows/macOS/Linux通用）</h2>
-<h3>1.1 安装基础工具链</h3>
-<div class="highlight"><pre><span></span><code>安装Python<span class="w"> </span><span class="m">3</span>.10+
-<span class="c1"># 安装Pelican及其依赖</span>
-pip<span class="w"> </span>install<span class="w"> </span>pelican<span class="w"> </span>markdown<span class="w"> </span>ghp-import
-</code></pre></div>
+            </footer>
+        </article>
 
-<h3>1.2 创建项目目录结构</h3>
-<div class="highlight"><pre><span></span><code>创建一个以小写github用户名命名的项目目录并在终端打开
-pelican-quickstart<span class="w">  </span><span class="c1"># 按默认配置快速生成项目骨架</span>
-</code></pre></div>
 
-<p>在交互式提示中，您需要回答一些问题来配置您的博客。以下是一些建议的回答：</p>
-<ul>
-<li>博客路径：直接按Enter使用当前目录</li>
-<li>博客标题：输入您想要的博客标题，例如"我的技术博客"</li>
-<li>博客作者：输入您的名字</li>
-<li>博客语言：输入 [Chinese (Simplified)]</li>
-<li>时区：输入 Asia/Shanghai</li>
-<li>是否使用自定义URL：如果您有域名，输入 y ，否则输入 n</li>
-<li>如果选择了自定义URL，输入您的域名</li>
-<li>是否生成Makefile：输入 y</li>
-<li>是否自动生成文章：输入 y</li>
-<li>是否使用GitHub Pages：输入 y</li>
-<li>是否使用GitHub项目页面：输入 y （这将使用 gh-pages 分支）</li>
-</ul>
-<p>生成后的关键目录：</p>
-<div class="highlight"><pre><span></span><code>├── content/        # 原始文章存放地（Markdown格式）
-├── output/         # 自动生成的静态文件
-├── pelicanconf.py  # 主配置文件
-└── Makefile        # 自动化构建脚本
-</code></pre></div>
-
-<h3>1.3 生成依赖文件</h3>
-<div class="highlight"><pre><span></span><code><span class="c1"># 生成依赖文件</span>
-pip<span class="w"> </span>freeze<span class="w"> </span>&gt;<span class="w"> </span>requirements.txt
-</code></pre></div>
-
-<hr>
-<h2>二、Pelican核心配置（可选）</h2>
-<h3>2.1 基础配置</h3>
-<p>编辑<code>pelicanconf.py</code>文件以自定义您的博客</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># 基础信息</span>
-<span class="n">AUTHOR</span> <span class="o">=</span> <span class="s1">&#39;YourName&#39;</span>
-<span class="n">SITENAME</span> <span class="o">=</span> <span class="s1">&#39;Tech Insights&#39;</span>
-<span class="n">SITEURL</span> <span class="o">=</span> <span class="s1">&#39;https://yourusername.github.io&#39;</span>
-
-<span class="c1"># 路径配置</span>
-<span class="n">PATH</span> <span class="o">=</span> <span class="s1">&#39;content&#39;</span>
-<span class="n">OUTPUT_PATH</span> <span class="o">=</span> <span class="s1">&#39;output&#39;</span>
-
-<span class="c1"># 时间配置</span>
-<span class="n">TIMEZONE</span> <span class="o">=</span> <span class="s1">&#39;Asia/Shanghai&#39;</span>
-<span class="n">DATE_FORMATS</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;zh-CN&#39;</span><span class="p">:</span> <span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M&#39;</span><span class="p">,</span>
-<span class="p">}</span>
-<span class="c1"># 主题设置</span>
-<span class="c1"># THEME = &#39;notmyidea&#39;  # 默认主题</span>
-</code></pre></div>
-
-<p>编辑 <code>publishconf.py</code>文件以配置发布设置：</p>
-<div class="highlight"><pre><span></span><code><span class="ch">#!/usr/bin/env python</span>
-<span class="c1"># -*- coding: utf-8 -*- #</span>
-
-<span class="c1"># This file is only used if you use `make publish` or</span>
-<span class="c1"># explicitly specify it as your config file.</span>
-
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">curdir</span><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">pelicanconf</span> <span class="kn">import</span> <span class="o">*</span>
-
-<span class="c1"># 如果您有自定义域名，请取消注释并修改下面的行</span>
-<span class="c1"># SITEURL = &#39;https://yourdomain.com&#39;</span>
-<span class="n">SITEURL</span> <span class="o">=</span> <span class="s1">&#39;https://yourusername.github.io&#39;</span>
-<span class="n">RELATIVE_URLS</span> <span class="o">=</span> <span class="kc">False</span>
-
-<span class="n">FEED_ALL_ATOM</span> <span class="o">=</span> <span class="s1">&#39;feeds/all.atom.xml&#39;</span>
-<span class="n">CATEGORY_FEED_ATOM</span> <span class="o">=</span> <span class="s1">&#39;feeds/</span><span class="si">{slug}</span><span class="s1">.atom.xml&#39;</span>
-
-<span class="n">DELETE_OUTPUT_DIRECTORY</span> <span class="o">=</span> <span class="kc">True</span>
-
-<span class="c1"># 以下设置通常对于发布很有用</span>
-<span class="c1"># 取消注释以启用它们</span>
-<span class="c1">#DISQUS_SITENAME = &quot;yourdisqusname&quot;</span>
-<span class="c1">#GOOGLE_ANALYTICS = &quot;UA-XXXXXXXX-X&quot;</span>
-</code></pre></div>
-
-<p><code>pelicanconf.py</code>和<code>publishconf.py</code>文件中的配置项可以根据您的需求进行调整。前者是开发环境配置（本地开发和预览），后者是生产环境配置（用于发布）。</p>
-<h3>2.2 在content文件夹创建首篇文章</h3>
-<div class="highlight"><pre><span></span><code>content/welcome.md
-</code></pre></div>
-
-<p>文章头信息（Front Matter）：</p>
-<div class="highlight"><pre><span></span><code>Title: 欢迎来到我的技术博客
-Date: 2025-04-03 10:00
-Category: 技术
-Tags: pelican, github-actions
-Slug: welcome
-</code></pre></div>
-
-<p>正文内容：</p>
-<div class="highlight"><pre><span></span><code>欢迎使用Pelican搭建个人技术博客！本文将指导你完成从环境搭建到自动化部署的全流程...
-
-<span class="gu">## 安装指南</span>
-<span class="k">1.</span> 安装Python环境
-<span class="k">2.</span> 创建Pelican项目
-<span class="k">3.</span> 编写第一篇文章
-</code></pre></div>
-
-<h2>三、GitHub Actions自动化构建</h2>
-<h3>3.1 创建GitHub Actions工作流</h3>
-<p>在项目根目录下创建 <code>.github/workflows/build.yml</code>：</p>
-<div class="highlight"><pre><span></span><code><span class="n">name</span><span class="p">:</span><span class="w"> </span><span class="n">Deploy</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">GitHub</span><span class="w"> </span><span class="n">Pages</span>
-
-<span class="n">on</span><span class="p">:</span>
-<span class="w">  </span><span class="n">push</span><span class="p">:</span>
-<span class="w">    </span><span class="n">branches</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">&quot;main&quot;</span><span class="w"> </span><span class="p">]</span>
-
-<span class="n">jobs</span><span class="p">:</span>
-<span class="w">  </span><span class="n">deploy</span><span class="p">:</span>
-<span class="w">    </span><span class="n">runs</span><span class="o">-</span><span class="n">on</span><span class="p">:</span><span class="w"> </span><span class="n">ubuntu</span><span class="o">-</span><span class="n">latest</span><span class="w">  </span><span class="c1"># 改为Linux环境</span>
-
-<span class="w">    </span><span class="n">steps</span><span class="p">:</span>
-<span class="w">    </span><span class="o">-</span><span class="w"> </span><span class="n">name</span><span class="p">:</span><span class="w"> </span><span class="n">Checkout</span>
-<span class="w">      </span><span class="n">uses</span><span class="p">:</span><span class="w"> </span><span class="n">actions</span><span class="o">/</span><span class="n">checkout</span><span class="nd">@v4</span>
-<span class="w">      </span><span class="k">with</span><span class="p">:</span>
-<span class="w">        </span><span class="n">submodules</span><span class="p">:</span><span class="w"> </span><span class="n">recursive</span>
-
-<span class="w">    </span><span class="o">-</span><span class="w"> </span><span class="n">name</span><span class="p">:</span><span class="w"> </span><span class="n">Set</span><span class="w"> </span><span class="n">up</span><span class="w"> </span><span class="n">Python</span><span class="w"> </span><span class="mf">3.10</span>
-<span class="w">      </span><span class="n">uses</span><span class="p">:</span><span class="w"> </span><span class="n">actions</span><span class="o">/</span><span class="n">setup</span><span class="o">-</span><span class="n">python</span><span class="nd">@v4</span>
-<span class="w">      </span><span class="k">with</span><span class="p">:</span>
-<span class="w">        </span><span class="n">python</span><span class="o">-</span><span class="n">version</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;3.10&#39;</span>
-
-<span class="w">    </span><span class="o">-</span><span class="w"> </span><span class="n">name</span><span class="p">:</span><span class="w"> </span><span class="n">Install</span><span class="w"> </span><span class="n">dependencies</span>
-<span class="w">      </span><span class="n">run</span><span class="p">:</span><span class="w"> </span><span class="o">|</span>
-<span class="w">        </span><span class="n">python</span><span class="w"> </span><span class="o">-</span><span class="n">m</span><span class="w"> </span><span class="n">pip</span><span class="w"> </span><span class="n">install</span><span class="w"> </span><span class="o">--</span><span class="n">upgrade</span><span class="w"> </span><span class="n">pip</span>
-<span class="w">        </span><span class="n">pip</span><span class="w"> </span><span class="n">install</span><span class="w"> </span><span class="o">-</span><span class="n">r</span><span class="w"> </span><span class="n">requirements</span><span class="o">.</span><span class="n">txt</span>
-
-<span class="w">    </span><span class="o">-</span><span class="w"> </span><span class="n">name</span><span class="p">:</span><span class="w"> </span><span class="n">Build</span><span class="w"> </span><span class="n">site</span>
-<span class="w">      </span><span class="n">run</span><span class="p">:</span><span class="w"> </span><span class="o">|</span>
-<span class="w">        </span><span class="n">pelican</span><span class="w"> </span><span class="n">content</span><span class="w"> </span><span class="o">-</span><span class="n">s</span><span class="w"> </span><span class="n">publishconf</span><span class="o">.</span><span class="n">py</span>
-
-<span class="w">    </span><span class="o">-</span><span class="w"> </span><span class="n">name</span><span class="p">:</span><span class="w"> </span><span class="n">Deploy</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">GitHub</span><span class="w"> </span><span class="n">Pages</span>
-<span class="w">      </span><span class="n">env</span><span class="p">:</span>
-<span class="w">        </span><span class="n">GITHUB_TOKEN</span><span class="p">:</span><span class="w"> </span><span class="err">$</span><span class="p">{{</span><span class="w"> </span><span class="n">secrets</span><span class="o">.</span><span class="n">GITHUB_TOKEN</span><span class="w"> </span><span class="p">}}</span>
-<span class="w">      </span><span class="n">run</span><span class="p">:</span><span class="w"> </span><span class="o">|</span>
-<span class="w">        </span><span class="n">ghp</span><span class="o">-</span><span class="kn">import</span><span class="w"> </span><span class="o">-</span><span class="n">m</span><span class="w"> </span><span class="s2">&quot;Automated deployment&quot;</span><span class="w"> </span><span class="o">-</span><span class="n">p</span><span class="w"> </span><span class="o">-</span><span class="n">f</span><span class="w"> </span><span class="n">output</span>
-</code></pre></div>
-
-<hr>
-<h2>四、GitHub Actions自动化部署</h2>
-<h3>4.1 创建GitHub仓库</h3>
-<div class="highlight"><pre><span></span><code>使用VScode推送并创建远程仓库main分支和gh-pages分支
-</code></pre></div>
-
-<p>然后修改远程仓库设置中修改仓库名：在原仓库名后面加上.github.io</p>
-<h3>4.2 配置GitHub Pages</h3>
-<p>在仓库设置中GitHub Pages中选择从分支部署：
-- 选择分支：<code>gh-pages</code>
-- 根目录</p>
-<hr>
-<h2>五、持续集成与发布</h2>
-<h3>5.1 在本地content中添加文章</h3>
-<h3>5.2在主分支推送项目后，检测到主分支内容变动会触发自动构建工作流build.yml</h3>
-<div class="highlight"><pre><span></span><code>git<span class="w"> </span>add<span class="w"> </span>.
-git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;这里是提交的信息&quot;</span>
-git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>main
-</code></pre></div>
-
-<p>工作流会自动构建静态页面并存放到gh-pages分支。</p>
-<h3>5.3 gh-pages分支内容变动会触发自动部署工作流</h3>
-<p>部署完成后，GitHub Actions会自动生成构建日志，部署成功后即可通过仓库的GitHub Pages链接访问博客。</p>
-<h2>六：更新博客</h2>
-<p>每当您想要添加新文章或更新博客时，请按照以下步骤操作：</p>
-<ol>
-<li>在 content 目录中创建新的Markdown文件</li>
-<li>提交更改： git add . &amp;&amp; git commit -m "提交信息"</li>
-<li>推送到GitHub： git push origin main</li>
-<li>等待几分钟，新文章将自动部署到GitHub Pages。
-（推荐使用git桌面gui工具提交）</li>
-</ol>                    </article>
-                </aside><!-- /#featured -->
-                <section id="extras" class="body">
-                                <div class="blogroll">
-                                        <h2>links</h2>
-                                        <ul>
-                                                        <li><a href="https://getpelican.com/">Pelican</a></li>
-                                                        <li><a href="https://www.python.org/">Python.org</a></li>
-                                                        <li><a href="https://palletsprojects.com/p/jinja/">Jinja2</a></li>
-                                                        <li><a href="#">You can modify those links in your config file</a></li>
-                                        </ul>
-                                </div><!-- /.blogroll -->
-                                <div class="social">
-                                        <h2>social</h2>
-                                        <ul>
-
-                                                        <li><a href="#">You can add links in your config file</a></li>
-                                                        <li><a href="#">Another social link</a></li>
-                                        </ul>
-                                </div><!-- /.social -->
-                </section><!-- /#extras -->
-
-                <footer id="contentinfo" class="body">
-                        <address id="about" class="vcard body">
-                                Proudly powered by <a rel="nofollow" href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a rel="nofollow" href="https://www.python.org/">Python</a>.
-                        </address><!-- /#about -->
-
-                        <p>The theme is by <a rel="nofollow" href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
-                </footer><!-- /#contentinfo -->
-
-        </body>
+      </main>
+      <footer>
+          <address>
+            Proudly powered by <a rel="nofollow" href="https://getpelican.com/">Pelican</a>,
+            which takes great advantage of <a rel="nofollow" href="https://www.python.org/">Python</a>.
+          </address>
+      </footer>
+  </body>
 </html>
