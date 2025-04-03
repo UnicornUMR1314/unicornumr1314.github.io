@@ -25,7 +25,7 @@ TRANSLATION_FEED_ATOM = None
 AUTHOR_FEED_ATOM = None
 AUTHOR_FEED_RSS = None
 
-THEME = r'pelican-themes/pelican-fh5co-marble'
+THEME = 'notmyidea' # 主题设置
 # Blogroll
 LINKS = (
     ("Pelican", "https://getpelican.com/"),
