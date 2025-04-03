@@ -37,10 +37,10 @@ DEFAULT_PAGINATION = 10
 #THEME = 'notmyidea'  # 默认主题
 
 # 静态路径
-STATIC_PATHS = ['images', 'extra/CNAME','downloads']
-EXTRA_PATH_METADATA = {
-    'extra/CNAME': {'path': 'CNAME'},
-}
+# STATIC_PATHS = ['images', 'extra/CNAME','downloads']
+# EXTRA_PATH_METADATA = {
+#     'extra/CNAME': {'path': 'CNAME'},
+# }
 
 # 文章URL结构
 # ARTICLE_URL = 'posts/{slug}/'
