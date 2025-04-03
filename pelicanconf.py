@@ -1,4 +1,4 @@
-AUTHOR = 'Uni星人'
+# AUTHOR = 'Uni星人'
 SITENAME = 'Uni星人的博客'
 SITEURL = "" # 本地开发环境配置（空字符串自动使用 http://localhost:8000 作为根路径）
 
