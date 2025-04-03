@@ -16,6 +16,14 @@ CATEGORY_FEED_ATOM = "feeds/{slug}.atom.xml"
 AUTHOR_FEED_RSS = 'feeds/{slug}.rss.xml' 
 
 DELETE_OUTPUT_DIRECTORY = True
+# 设置英文日期格式
+DATE_FORMATS = {
+    'en': '%a, %d %b %Y',
+}
+
+# 设置中文日期格式
+LOCALE = ['zh_CN.utf8', 'zh_CN.UTF-8']
+DEFAULT_DATE_FORMAT = '%Y年%m月%d日'
 
 # Following items are often useful when publishing
 
