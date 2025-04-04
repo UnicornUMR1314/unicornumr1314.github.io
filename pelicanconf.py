@@ -40,7 +40,7 @@ SOCIAL = (
     ("bilibili", "https://space.bilibili.com/84203884"),
     ("Github","https://github.com/UnicornUMR1314"),
 )
-DEFAULT_PAGINATION = 10
+DEFAULT_PAGINATION = 4
 
 # Uncomment following line if you want document-relative URLs when developing
 # RELATIVE_URLS = True
