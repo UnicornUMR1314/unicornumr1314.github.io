@@ -18,6 +18,15 @@ JINJA_ENVIRONMENT = {
     'lstrip_blocks': True,
     'trim_blocks': True
 }
+# 英文日期格式
+DATE_FORMATS = {
+    'en': '%a, %d %b %Y',
+    'zh_CN': '%Y年%m月%d日',
+}
+
+# 默认日期格式
+DEFAULT_DATE_FORMAT = '%Y年%m月%d日'
+
 # Feed generation is usually not desired when developing
 FEED_ALL_ATOM = None
 CATEGORY_FEED_ATOM = None
