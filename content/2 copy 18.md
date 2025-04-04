@@ -1,6 +1,5 @@
 Title: 我的第二篇博客文章3
 Category: 技术
-Date: 2023-11-01 10:00
 Tags: pelican, python, 博客
 Slug: my-second-post2
 Summary: 这是我使用Pelican创建的第二篇博客文章
