@@ -25,7 +25,7 @@ TRANSLATION_FEED_ATOM = None
 AUTHOR_FEED_ATOM = None
 AUTHOR_FEED_RSS = None
 
-THEME = 'pelican-bootstrap3' # 主题设置
+THEME = 'notmyidea' # 主题设置
 # Blogroll
 LINKS = (
     ("Pelican", "https://getpelican.com/"),
@@ -39,10 +39,6 @@ SOCIAL = (
     ("You can add links in your config file", "#"),
     ("Another social link", "#"),
 )
-# 添加以下配置项允许覆盖输出文件
-DELETE_OUTPUT_DIRECTORY = True  # 构建前清空输出目录
-OUTPUT_RETENTION = []  # 不保留任何旧文件
-
 DEFAULT_PAGINATION = 10
 
 # Uncomment following line if you want document-relative URLs when developing

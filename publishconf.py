@@ -16,9 +16,6 @@ CATEGORY_FEED_ATOM = "feeds/{slug}.atom.xml"
 
 DELETE_OUTPUT_DIRECTORY = True
 THEME = 'pelican-themes/pelican-bootstrap3' 
-# 添加以下配置项允许覆盖输出文件
-DELETE_OUTPUT_DIRECTORY = True  # 构建前清空输出目录
-OUTPUT_RETENTION = []  # 不保留任何旧文件
 
 DEFAULT_PAGINATION = 10
 # Following items are often useful when publishing
