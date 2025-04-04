@@ -12,7 +12,7 @@
 &lt;p&gt;```python
 def hello_world():
     print("Hello, Pelican Blog!")&lt;/p&gt;
-&lt;p&gt;hello_world()&lt;/p&gt;</content><category term="技术"></category><category term="pelican"></category><category term="python"></category><category term="博客"></category></entry><entry><title>我的第二篇博客文章</title><link href="https://unicornumr1314.github.io/my-second-post.html" rel="alternate"></link><published>2023-11-01T10:00:00+08:00</published><updated>2023-11-01T10:00:00+08:00</updated><author><name>Uni星人</name></author><id>tag:unicornumr1314.github.io,2023-11-01:/my-second-post.html</id><summary type="html">&lt;p&gt;这是我使用Pelican创建的第二篇博客文章&lt;/p&gt;</summary><content type="html">&lt;h1&gt;使用 Pelican + GitHub Actions 搭建自动化静态博客全攻略&lt;/h1&gt;
+&lt;p&gt;hello_world()&lt;/p&gt;</content><category term="技术"></category><category term="pelican"></category><category term="python"></category><category term="博客"></category></entry><entry><title>我的第二篇博客文章2</title><link href="https://unicornumr1314.github.io/my-second-post1.html" rel="alternate"></link><published>2023-11-01T10:00:00+08:00</published><updated>2023-11-01T10:00:00+08:00</updated><author><name>Uni星人</name></author><id>tag:unicornumr1314.github.io,2023-11-01:/my-second-post1.html</id><summary type="html">&lt;p&gt;这是我使用Pelican创建的第二篇博客文章&lt;/p&gt;</summary><content type="html">&lt;h1&gt;使用 Pelican + GitHub Actions 搭建自动化静态博客全攻略&lt;/h1&gt;
 &lt;h2&gt;一、环境准备（Windows/macOS/Linux通用）&lt;/h2&gt;
 &lt;h3&gt;1.1 安装基础工具链&lt;/h3&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;安装Python&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="m"&gt;3&lt;/span&gt;.10+
