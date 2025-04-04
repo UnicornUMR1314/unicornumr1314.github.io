@@ -25,7 +25,7 @@ TRANSLATION_FEED_ATOM = None
 AUTHOR_FEED_ATOM = None
 AUTHOR_FEED_RSS = None
 
-THEME = 'pelican-themes/pelican-fh5co-marble' # 主题设置
+THEME = 'pelican-themes/mg' # 主题设置
 # Blogroll
 LINKS = (
     ("Pelican", "https://getpelican.com/"),
