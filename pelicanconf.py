@@ -36,8 +36,9 @@ LINKS = (
 
 # Social widget
 SOCIAL = (
-    ("You can add links in your config file", "#"),
-    ("Another social link", "#"),
+    ("Twitter", "https://x.com/nicornU214610"),
+    ("bilibili", "https://space.bilibili.com/84203884"),
+    ("Github","https://github.com/UnicornUMR1314"),
 )
 DEFAULT_PAGINATION = 10
 
