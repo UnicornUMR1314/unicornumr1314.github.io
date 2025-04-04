@@ -19,7 +19,23 @@ DELETE_OUTPUT_DIRECTORY = True
 DEFAULT_LANG = 'zh_CN'  # 修正为标准的语言代码
 
 # 添加完整的国际化插件配置
-PLUGINS = ['i18n_subsites']
+PLUGINS = ['i18n_subsites','pelican.plugins.sitemap',]
+
+# 添加站点地图配置
+SITEMAP = {
+    "format": "xml",
+    "priorities": {
+        "articles": 0.5,
+        "indexes": 0.5,
+        "pages": 0.5
+    },
+    "changefreqs": {
+        "articles": "monthly",
+        "indexes": "daily",
+        "pages": "monthly"
+    }
+}
+
 JINJA_ENVIRONMENT = {
     'extensions': ['jinja2.ext.i18n'],
     'lstrip_blocks': True,

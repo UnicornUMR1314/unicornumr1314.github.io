@@ -13,7 +13,7 @@ DEFAULT_LANG = 'zh_CN'  # 修正为标准的语言代码
 # 修正Locale设置
 LOCALE = ('zh_CN.UTF-8', 'zh_CN', 'zh', 'zh_Hans_CN', 'zh_Hans', 'en_US.UTF-8')
 # 添加完整的国际化插件配置
-PLUGINS = ['i18n_subsites']
+PLUGINS = ['i18n_subsites','pelican.plugins.sitemap',]
 JINJA_ENVIRONMENT = {
     'extensions': ['jinja2.ext.i18n'],
     'lstrip_blocks': True,
