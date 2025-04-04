@@ -18,8 +18,6 @@ DELETE_OUTPUT_DIRECTORY = True
 # DEFAULT_LANG = 'Chinese (Simplified)'
 DEFAULT_LANG = 'zh_CN'  # 修正为标准的语言代码
 
-# 添加本地化配置（必须放在THEME设置之前）
-LOCALE = 'zh_CN.UTF-8'
 # 添加完整的国际化插件配置
 PLUGINS = ['i18n_subsites']
 JINJA_ENVIRONMENT = {
