@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}{{ article.title }}{% endblock %}
+{% block meta %}
+    <meta name="author" content="{{ article.author.name }}" />
+    <meta name="description" content="{{ article.summary|striptags }}" />
+    <meta name="keywords" content="{{ article.tags|join(', ') }}">
+    {% include "partial/og_tags.html" %}
+{% endblock %}
+
+{% block content %}
+
+    <div class="fh5co-narrow-content article-content">
+        <h1 class="fh5co-heading-colored">{{ article.title }}</h1>
+
+        <div>{{ _('by') }}
+            {% for author in article.authors %}
+                <span dir="ltr">
+                <a href="{{ author.url }}">{{ author }}</a>{% if not loop.last %}, {% endif %}
+                </span>
+            {% endfor %} - <span dir="ltr">{{ article.locale_date }}</span>
+        </div>
+
+        {% if article.tags %}
+            <div><span>{{ _('Tags') }}</span>
+                {% for tag in article.tags %}
+                    <span><a href="{{ SITEURL }}/{{ tag.url }}">#{{ tag }}</a> </span>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <span dir="ltr">
+        {% if article.readtime_string %}{{ _('Reading time') }}: {{article.readtime_string_with_seconds}}{% endif %}
+        </span>
+
+        <div class="animate-box" data-animate-effect="fadeInLeft">
+            <p class="animate-box" data-animate-effect="fadeInLeft">{{ article.content }}</p>
+        </div>
+    </div>
+
+    {% include 'partial/disqus.html' %}
+
+{% endblock %}
