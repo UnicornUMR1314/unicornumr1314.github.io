@@ -25,7 +25,7 @@ TRANSLATION_FEED_ATOM = None
 AUTHOR_FEED_ATOM = None
 AUTHOR_FEED_RSS = None
 
-THEME = 'notmyidea' # 主题设置
+THEME = 'pelican-bootstrap3' # 主题设置
 # Blogroll
 LINKS = (
     ("Pelican", "https://getpelican.com/"),
