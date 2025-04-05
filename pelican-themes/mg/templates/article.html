@@ -76,7 +76,12 @@
         <section itemprop="articleBody">{{ article.content }}</section>
         <hr class="uk-article-divider">
     </article>
-
+    {# 添加版权信息 - Jinja2模板注释,不会出现在最终HTML中 #}
+    <div class="copyright-notice">
+     <hr>
+        <p>© {{ article.date|strftime('%Y') }} {{ AUTHOR }}. 保留所有权利。</p>
+        <p>原文链接：<a href="{{ SITEURL }}/{{ article.url }}">{{ SITEURL }}/{{ article.url }}</a></p>
+    </div>
     {% if DISQUS_SITENAME %}
     <div id="disqus_thread"></div>
     <script type="text/javascript">
@@ -111,13 +116,6 @@
             async>
     </script>
     {% endif %}
-    <section itemprop="articleBody">{{ article.content }}</section>
-
-{# 添加版权信息 #}
-<div class="copyright-notice">
-    <hr>
-    <p>© {{ article.date|strftime('%Y') }} {{ AUTHOR }}. 保留所有权利。</p>
-    <p>原文链接：<a href="{{ SITEURL }}/{{ article.url }}">{{ SITEURL }}/{{ article.url }}</a></p>
-</div>
+    
 </div>
 {% endblock %}
