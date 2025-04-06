@@ -49,6 +49,7 @@ SOCIAL = (
     ("twitter", "https://x.com/nicornU214610"),
     ("bilibili", "https://space.bilibili.com/84203884"),
     ("github","https://github.com/UnicornUMR1314"),
+    ("youtube", "https://youtube.com/channel/UCsQNS3huk3nB-SCOc7C-y8w?si=YKW4WsgDOzl2O8-o"),
 )
 DEFAULT_PAGINATION = 4
 
