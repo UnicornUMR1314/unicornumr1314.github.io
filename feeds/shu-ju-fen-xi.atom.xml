@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Uni星人的博客 - 数据分析</title><link href="https://unicornumr1314.github.io/" rel="alternate"></link><link href="https://unicornumr1314.github.io/feeds/shu-ju-fen-xi.atom.xml" rel="self"></link><id>https://unicornumr1314.github.io/</id><updated>2025-06-05T21:00:00+08:00</updated><entry><title>在Excel中清洗数据的好用方法</title><link href="https://unicornumr1314.github.io/excel-clean-data.html" rel="alternate"></link><published>2025-06-05T21:00:00+08:00</published><updated>2025-06-05T21:00:00+08:00</updated><author><name>Uni星人</name></author><id>tag:unicornumr1314.github.io,2025-06-05:/excel-clean-data.html</id><summary type="html">&lt;h3&gt;&lt;strong&gt;1. 项目概览&lt;/strong&gt;&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;项目背景&lt;/strong&gt;：某公司开展员工满意度调查，回收问卷后得到原始数据，需要对原始数据进行清洗.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;数据规模&lt;/strong&gt;：标注数 …&lt;/li&gt;&lt;/ul&gt;</summary><content type="html">&lt;h3&gt;&lt;strong&gt;1. 项目概览&lt;/strong&gt;&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;项目背景&lt;/strong&gt;：某公司开展员工满意度调查，回收问卷后得到原始数据，需要对原始数据进行清洗.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;数据规模&lt;/strong&gt;：标注数据量1000条数据+6个维度、数据来源企业脱敏数据。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;项目周期&lt;/strong&gt;：独立完成，耗时4h。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4&gt;&lt;strong&gt;2. 技术路径&lt;/strong&gt;&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;数据处理&lt;/strong&gt;：&lt;br&gt;
+  经过分析,该原始数据存在以下问题：&lt;/li&gt;
+&lt;li&gt;部分问卷的 “年龄” 字段为空值；&lt;/li&gt;
+&lt;li&gt;“入职日期” 字段格式不一致（如 “2023-01”“2023 年 1 月”“2023/1”）；&lt;/li&gt;
+&lt;li&gt;存在重复提交的问卷（同一员工提交了 2 次）；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;处理方法&lt;/strong&gt;：&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;插入数据透视表,以"部门"为行,以"年龄为值"统计每个部门平均年龄;
+  用Excel的筛选功能,筛选出"年龄"为空的行,再筛选出“部门”为“销售部”的行,统一填入销售部的平均年龄。如此可以快速填充缺失值。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;通过 “拆分格式→文本转换→汇总统一→转日期类型” 的流程，将混乱的多格式日期，逐步规范为统一的日期值：
+拆分格式：为每种日期格式建列，明确处理对象；
+文本转换：用 IF+MID 把不同格式转成统一文本（如 YYYY-MM-DD 文本）；
+汇总统一：用 IF 合并结果，确保每行一个统一文本；
+转日期：用 DATE+MID 将文本转为真正的日期类型（可参与日期计算）。
+（注：步骤 2 中 IF 返回的 0 需注意过滤，避免影响后续转换；函数操作在 Excel、Google Sheets 等工具中通用，语法略有差异时需调整。）&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;用Excel的“删除重复项”功能，将重复提交的问卷删除。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4&gt;以下是统一多格式日期数据的逐点解析：&lt;/h4&gt;
+&lt;p&gt;1️⃣. 对每一种日期格式添加一个列
+目的：先梳理数据中存在的日期格式（如 YYYY-MM-DD、MM/DD/YYYY、DD.MM.YYYY 等），为每种格式单独建列。
+作用：方便后续针对不同格式的字符串，分别提取年、月、日信息。&lt;/p&gt;
+&lt;p&gt;2️⃣. 使用 IF 结合 MID，转化为目标格式的常规文本（false 忽略会返回 0）
+逻辑：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;MID(text, start_num, num_chars)：从字符串中按位置截取字符（比如从 MM/DD/YYYY 中截取月份 MID(A1, 1, 2)）。
+IF(condition, value_if_true, value_if_false)：判断日期格式，针对性截取年、月、日，拼接成 统一文本格式（如 YYYY-MM-DD 的文本，而非日期类型）。
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;注意：若 IF 的条件不满足（value_if_false），默认返回 0，需后续处理无效值。&lt;/p&gt;
+&lt;p&gt;3️⃣. 添加一个汇总列，用 IF 进行汇总
+目的：将步骤 2 中不同格式列的结果，统一合并到一列。
+逻辑：用 IF 判断哪一列有有效文本（非空、非 0），将其值提取到汇总列。例如：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="k"&gt;IF&lt;/span&gt;&lt;span class="ss"&gt;(&lt;/span&gt;格式列&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&amp;gt;&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&amp;quot;&lt;/span&gt;,&lt;span class="w"&gt; &lt;/span&gt;格式列&lt;span class="mi"&gt;1&lt;/span&gt;,&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;IF&lt;/span&gt;&lt;span class="ss"&gt;(&lt;/span&gt;格式列&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&amp;gt;&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&amp;quot;&lt;/span&gt;,&lt;span class="w"&gt; &lt;/span&gt;格式列&lt;span class="mi"&gt;2&lt;/span&gt;,&lt;span class="w"&gt; &lt;/span&gt;...&lt;span class="ss"&gt;))&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;确保每行只有 一个统一的文本日期（如 2023-01-01 形式的文本）。&lt;/p&gt;
+&lt;p&gt;4️⃣. 再添加一个日期列，用 DATE() 结合 MID() 将常规文本转化为日期
+逻辑：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;DATE(year, month, day)：将数字型的年、月、日转化为 日期类型（如 DATE(2023, 1, 1) 返回 2023/1/1 日期）。
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;先用 MID 从汇总文本中提取年、月、日的数字（如从 2023-01-01 中提取 MID(汇总列, 1, 4) 作为年），再传给 DATE 函数，最终生成标准日期。&lt;/p&gt;</content><category term="数据分析"></category><category term="Excel"></category><category term="数据清洗"></category></entry></feed>
