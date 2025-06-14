@@ -3,6 +3,8 @@ SITENAME = 'Uni星人的博客'
 SITEURL = ""
 
 PATH = "content"
+STATIC_PATHS = ['attach']
+ARTICLE_PATHS = ['']
 
 TIMEZONE = 'Asia/Shanghai'
 
