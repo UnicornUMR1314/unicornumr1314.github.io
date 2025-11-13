@@ -1,0 +1,269 @@
+<meta property="og:title" content="Uni星人的博客" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://unicornumr1314.github.io" />
+<meta name="twitter:url" content="https://unicornumr1314.github.io" />
+<meta itemprop="name" content="Uni星人的博客">
+<meta itemprop="url" content="https://unicornumr1314.github.io">
+
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html lang="zh_cn" class="no-js lt-ie9 lt-ie8 lt-ie7" prefix="og: http://ogp.me/ns#" itemscope itemtype="http://schema.org/Blog"> <![endif]-->
+<!--[if IE 7]>         <html lang="zh_cn" class="no-js lt-ie9 lt-ie8" prefix="og: http://ogp.me/ns#" itemscope itemtype="http://schema.org/Blog"> <![endif]-->
+<!--[if IE 8]>         <html lang="zh_cn" class="no-js lt-ie9" prefix="og: http://ogp.me/ns#" itemscope itemtype="http://schema.org/Blog"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="zh_cn" class="no-js" prefix="og: http://ogp.me/ns#" itemscope itemtype="http://schema.org/Blog"> <!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Archives</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<link rel="shortcut icon" href="https://unicornumr1314.github.io/" type="">
+<meta name="author" content="Uni星人">
+<meta name="copyright" content="Uni星人">
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@" />
+<meta property="og:site_name" content="Uni星人的博客" />
+<meta property="og:title" content="Uni星人的博客" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://unicornumr1314.github.io" />
+<meta name="twitter:url" content="https://unicornumr1314.github.io" />
+<meta itemprop="name" content="Uni星人的博客" />
+<meta itemprop="url" content="https://unicornumr1314.github.io"/>
+<link href="https://unicornumr1314.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Uni星人的博客 ATOM Feed"/>
+<link href='//fonts.googleapis.com/css?family=Open+Sans:800italic' rel='stylesheet' type='text/css'>
+<link href='//fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/uikit/2.15.0/css/uikit.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/uikit/2.15.0/css/components/search.min.css">
+<link rel="stylesheet" href="/theme/css/tipuesearch.css">
+<link rel="stylesheet" href="/theme/css/solarized.css">
+<link rel="stylesheet" href="/theme/css/main.css">
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
+</head>
+<body>
+<!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+<header class=" mg-header uk-navbar uk-navbar-attached">
+
+    <div class="uk-container uk-container-center">
+        <div class="uk-grid" data-uk-grid-margin>
+
+            <a class="mg-brand uk-navbar-brand uk-hidden-small" href="https://unicornumr1314.github.io">Uni星人的博客</a>
+            <div class="mg-tagline uk-navbar-content uk-hidden-small"></div>
+            <a class="uk-navbar-toggle uk-visible-small" href="#mg-offcanvas" data-uk-offcanvas></a>
+            <a class="mg-brand uk-navbar-brand uk-navbar-center uk-visible-small" href="https://unicornumr1314.github.io">Uni星人的博客</a>
+
+        </div>
+    </div>
+</header>
+
+<main class="mg-main">
+
+<div class="uk-container uk-container-center">
+
+    <div class="uk-grid" data-uk-grid-margin>
+        
+<div class="uk-width-medium-4-5">
+    <h1 class="uk-heading-large">Archives</h1>
+
+    <article class="uk-article">
+        <a href="delete-docx-empty-lines-merge-newlines.html" class="uk-article-title uk-link-muted mg-list-title">删除 Word (.docx) 中的空行并合并连续换行 — dele_null_line.py 使用说明</a>
+        <p class="uk-article-meta">
+            <time datetime="2025-11-13">2025年11月13日</time>
+        </p>
+        <p>本文介绍仓库内的脚本 原始内容文档/dele_null_line.py，它可以自动删除 .docx 文档中的空段落，并在非空段落中合并连续换行（将多个连续换行替换为一个）。脚本同时会处理表格单元格内的段落。 主要功能 - 删除文档正文中空的段落（完全没有可见字符的段落）。 - 在非空段落中把连续的 \n 合并为单个 \n，避免多余的空行或换行符导致格式混乱。 - 遍历文档内的表格，按单元格同样规则清理空段落并合并换行。 - 提供简单的 Tkinter GUI，交互选择输入/输出文件路径，适合非命令行用户。 依赖 - 使用 python-docx（包名 python-docx）来读写 Word 文档。仓库中的脚本示例使用 from docx import Document。 安装 pip install python-docx （如果要使用 live GUI，请确保当前 Python 环境包含 Tkinter。Windows 上自带标准 Python 通常包含 Tkinter。） 如何使用 - 图形界面（推荐，脚本默认行为）: - 运行脚本： python 原始内容文档/dele_null_line.py 脚本会弹出文件选择对话框，请选择要处理的 .docx 文件，并指定输出文件名。 作为模块调用（在其他脚本中复用函数）: from 原始内容文档.dele_null_line import remove_empty_lines_from_docx remove_empty_lines_from_docx('input.docx', 'output.docx') 实现要点（供维护者参考） - 段落处理：脚本先遍历 doc.paragraphs，把纯空的段落标记删除，非空段落使用正则 re.sub(r"\n+","\n", text) 合并连续换行。 - 表格处理：进入每个 doc.tables，对每个单元格的 cell.paragraphs 做同样的清理与合并。 - 删除操作：对要删除的段落或单元格段落，使用底层 XML 节点 ._element.getparent().remove(...) 执行删除，避免改变段落集合时引发索引问题（通过反向索引删除）。 示例场景 - 批量格式化从其他来源复制粘贴到 Word 的内容，常见于论文、报告或网页复制导致的多余空行。 - 清理表格中因分行导致的冗余空段落，使单元格显示更整洁。 注意与限制 - 脚本基于 python-docx 的 API 操作，可能不会保留某些复杂样式或嵌入对象（图形/SmartArt 等）的精确格式。 - 删除空段落是以“纯文本为空”为判断标准；如果某些段落仅包含空白字符或不可见字符（特殊控制符），会被视为空并删除。 -...</p>
+
+    </article>
+    <article class="uk-article">
+        <a href="xvpn.html" class="uk-article-title uk-link-muted mg-list-title">告别网盘限速与快递硬盘！远程剪辑师的组网神器让我在任何地方都是“工作室”</a>
+        <p class="uk-article-meta">
+            <time datetime="2025-10-26">2025年10月26日</time>
+        </p>
+        <p>我是如何用一台XVPN网关，让百公里外的NAS变成我“本地磁盘”的。 作为一名靠视频吃饭的远程办公剪辑师，我的“诗和远方”曾经被几个巨大的痛点牢牢锁死： 素材传输是噩梦：客户在总部，原始素材在公司的NAS里。每次接急单，要么求人用网盘慢吞吞上传下载，要么干脆直接快递硬盘——时间成本和金钱成本都高得离谱。 协作效率低下：远程审片时，发给客户的低码流样片，他们永远会说“看不清细节”；而让他们下载原始文件，又会被网盘限速折磨到没脾气。 没有“工作室”的感觉：无法像在办公室一样，直接、流畅地访问公司内网的所有资源，感觉自己始终是个“局外人”。 我试过各种传统VPN，不是设置复杂，就是速度慢得像回到拨号上网时代，直到公司的IT小哥给我接入了XVPN网关。我的工作流，从此被彻底颠覆。 我的“魔法盒子”：XVPN网关带来的改变 IT小哥说，这个小白盒能通过IPv6让我和公司网络“直连”。我将信将疑地把它接在家里的光猫下，简单配置后，神奇的事情发生了： 改变一：百GB素材“秒传”，NAS变成本地盘 以前：一个50GB的项目素材包，通过某网盘传输，耗时超过5小时。 现在：在我的电脑上，直接映射公司NAS的网络驱动器。拖拽一个同样大小的文件夹到本地，喝杯咖啡的功夫，就传输完毕了。速度直接跑满我家宽带的上下行，感觉就像在访问电脑自身的硬盘一样。 这得益于XVPN的IPv6直连技术，没有中间服务器转发，数据直达，速度自然飞快。 改变二：无缝协作，远程审片如临现场 现在，我可以直接让客户通过一个共享链接，访问我电脑上正在编辑的工程文件，或者直接在线预览高质量、低延迟的成片。因为我们都处在XVPN组建的“大局域网”里，传输延迟极低，同省同网延迟稳定在20~21ms，再也不用为“看不清”和“下不动”扯皮了。 客户甚至可以直接访问公司内网的审片系统，体验和坐在会议室里一模一样。协作效率提升了200%都不止。 改变三：一个“虚拟工作室”随身携带 更让我惊喜的是，XVPN的二层网络功能。有一次，公司一台用于渲染的电脑网络故障，IP变了，远程桌面一直连不上。IT小哥在总部远程启用了二层网络，我在这边就像和那台电脑在同一个交换机下一样，直接用MAC地址扫描找到并连接了上去，恢复了渲染任务。 这意味着，无论我身在何处——家里、咖啡馆、还是旅途中，只要接上XVPN，我就拥有了一个完整的“虚拟工位”，所有内网设备触手可及。 给创意工作者的真心话 如果你和我一样，是一名依赖远程访问和高带宽传输的创意工作者（剪辑师、设计师、动画师等），XVPN网关绝对是一个能提升你幸福感和生产力的“隐藏神器”。 它： 一次性投入，零月租，比持续付费的云服务划算得多。 设置简单，远比折腾什么内网穿透、端口映射要友好。 安全私密，所有数据点对点加密传输，不像网盘那样有泄露风险。 现在，我的“数字游民”生活才真正变得自由和高效。我再也不用担心客户的紧急需求，也不用在文件传输上耗费无谓的生命。因为我知道，通过那个小小的“魔法盒子，我的工作室，永远在线，伴我随行。...</p>
+
+    </article>
+    <article class="uk-article">
+        <a href="Bilibili Spy X Family.html" class="uk-article-title uk-link-muted mg-list-title">番剧《间谍过家家》的评论分析</a>
+        <p class="uk-article-meta">
+            <time datetime="2025-08-11">2025年08月11日</time>
+        </p>
+        <p>分析目的和项目背景 目的:分析间谍过家家的评价,了解用户对该番剧的评价 , ,数据源:kaggle上的Bilibili Spy X Family数据集 数据准备 #导入所需库 ,import pandas as pd ,# pd.plotting.register_matplotlib_converters() ,import matplotlib.pyplot as plt ,#%matplotlib inline#可省,但保留可提高可移植性,以养成规范化习惯 ,import seaborn as sns ,print("Setup Complete") , ,# 设置中文字体显示 ,plt.rcParams['font.sans-serif'] = ['SimHei'] # 使用黑体显示中文 ,plt.rcParams['axes.unicode_minus'] = False...</p>
+
+    </article>
+    <article class="uk-article">
+        <a href="excel-clean-data2.html" class="uk-article-title uk-link-muted mg-list-title">在Excel中清洗数据的好用方法2</a>
+        <p class="uk-article-meta">
+            <time datetime="2025-06-14">2025年06月14日</time>
+        </p>
+        <p>1. 项目概览 项目背景：某电商平台收集了用户订单数据，存在以下问题： 重复数据：同一用户 ID 出现多次相同订单（订单号重复）。 缺失数据：部分订单的 “支付时间” 字段为空。 逻辑错误：“订单金额” 字段出现负数（如 - 50 元），“商品数量” 字段出现 0 件。 数据规模：标注数据量:115条，7维度、数据来源:模拟数据. 项目周期：1h 2. 技术路径 数据处理： 重复数据处理： 选中 “订单号” 列，使用 “数据→删除重复项”，勾选 “订单号”，删除完全重复的订单记录。 缺失数据处理： 通过 “数据→筛选” 选中所有 “支付时间” 为空的单元格。 计数筛选出的单元格数量.方法⑴:框选一列,然后看Excel底部状态栏的统计数据;方法⑵:找一个空单元格,使用“分类汇总” 函数计数=SUBTOTAL(3,A:A)-1.(3 对应的名称是 COUNTA（非空单元格个数）) 鉴于支付时间缺失比例达13%,而又比较重要,手动填充合理时间(订单创建时间+12h(支付和创建订单的平均间隔时间)) 逻辑错误处理： 列出可能的逻辑错误,如 “订单金额 < 0” 或 “商品数量 = 0” 的单元格. 使用"筛选"功能,筛选出"商品数量<=0"的单元格,然后删除掉这些行. 使用"筛选"功能,筛选出"订单金额<0"的单元格. 核对错误数据：若为录入错误，修正为正确值（如 - 50 元改为 50 元）；若为无效数据，删除对应记录。 3. 附件 下载模拟数据...</p>
+
+    </article>
+    <article class="uk-article">
+        <a href="excel-clean-data3.html" class="uk-article-title uk-link-muted mg-list-title">在Excel中数据加工的好用方法</a>
+        <p class="uk-article-meta">
+            <time datetime="2025-06-14">2025年06月14日</time>
+        </p>
+        <p>1. 项目概览 项目背景：某公司收集了员工数据（部分字段如下），需进行数据加工以满足分析需求： 员工号（如 “20230001”） 入职日期（如 “2023-10-01”） 身份证号（18 位，如 “11010119900101XXXX”） 月薪（如 8000 元） 部门（如 “销售部”“技术部”） 数据规模：标注数据量:1000条，5维度、数据来源:模拟数据. 项目周期：1.5h 2. 技术路径 数据处理： 从 “身份证号” 中提取 “出生年份” 和 “性别”： 出生年份：使用MID(身份证号,7,4)函数，截取第 7 到第 10 位字符。 性别：提取身份证号第 17 位，用IF(MOD(MID(身份证号,17,1),2)=1,"男","女")判断奇偶性。 计算各员工的 “工龄”（入职年份到当前年份的工作年限）： 公式:DATEDIF(入职日期, TODAY(), "Y"). DATEDIF函数是 Excel 中用于计算两个日期之间差值的函数，语法是DATEDIF(start_date,end_date,unit)。start_date是起始日期，end_date是结束日期，unit是返回差值的类型，比如 "Y" 是返回整年数，"M" 是返回整月数，"D" 是返回天数。 需按 “月薪” 将员工分为 “高薪”（≥15000 元）、“中薪”（8000-15000 元）、“低薪”（<8000 元）： VLOOKUP 函数分组：创建阈值表（低薪 < 8000，中薪 8000-15000，高薪≥15000）； 在员工表中新增 “薪酬等级” 列，输入公式=VLOOKUP(月薪, 阈值表, 2, 1)（模糊匹配）(这里例子是=VLOOKUP(D2,J$2:K$4,2,1)) 3. 附件 下载模拟数据...</p>
+
+    </article>
+    <article class="uk-article">
+        <a href="my-intro.html" class="uk-article-title uk-link-muted mg-list-title">个人介绍</a>
+        <p class="uk-article-meta">
+            <time datetime="2025-06-11">2025年06月11日</time>
+        </p>
+        <p>个人介绍 教育背景 计算机本科 工作经历 自由职业者 技术技能 数据分析 联系我 邮箱：suifengzhuxia@qq.com...</p>
+
+    </article>
+    <article class="uk-article">
+        <a href="excel-clean-data.html" class="uk-article-title uk-link-muted mg-list-title">在Excel中清洗数据的好用方法</a>
+        <p class="uk-article-meta">
+            <time datetime="2025-06-05">2025年06月05日</time>
+        </p>
+        <p>1. 项目概览 项目背景：某公司开展员工满意度调查，回收问卷后得到原始数据，需要对原始数据进行清洗. 数据规模：标注数据量1000条数据+6个维度、数据来源企业脱敏数据。 项目周期：独立完成，耗时4h。 2. 技术路径 数据处理： 经过分析,该原始数据存在以下问题： 部分问卷的 “年龄” 字段为空值； “入职日期” 字段格式不一致（如 “2023-01”“2023 年 1 月”“2023/1”）； 存在重复提交的问卷（同一员工提交了 2 次）； 处理方法： 插入数据透视表,以"部门"为行,以"年龄为值"统计每个部门平均年龄; 用Excel的筛选功能,筛选出"年龄"为空的行,再筛选出“部门”为“销售部”的行,统一填入销售部的平均年龄。如此可以快速填充缺失值。 通过 “拆分格式→文本转换→汇总统一→转日期类型” 的流程，将混乱的多格式日期，逐步规范为统一的日期值： 拆分格式：为每种日期格式建列，明确处理对象； 文本转换：用 IF+MID 把不同格式转成统一文本（如 YYYY-MM-DD 文本）； 汇总统一：用 IF 合并结果，确保每行一个统一文本； 转日期：用 DATE+MID 将文本转为真正的日期类型（可参与日期计算）。 （注：步骤 2 中 IF 返回的 0 需注意过滤，避免影响后续转换；函数操作在 Excel、Google Sheets 等工具中通用，语法略有差异时需调整。） 用Excel的“删除重复项”功能，将重复提交的问卷删除。 以下是统一多格式日期数据的逐点解析： 1️⃣. 对每一种日期格式添加一个列 目的：先梳理数据中存在的日期格式（如 YYYY-MM-DD、MM/DD/YYYY、DD.MM.YYYY 等），为每种格式单独建列。 作用：方便后续针对不同格式的字符串，分别提取年、月、日信息。 2️⃣. 使用 IF 结合 MID，转化为目标格式的常规文本（false 忽略会返回 0） 逻辑： MID(text, start_num, num_chars)：从字符串中按位置截取字符（比如从 MM/DD/YYYY 中截取月份 MID(A1, 1, 2)）。 IF(condition, value_if_true, value_if_false)：判断日期格式，针对性截取年、月、日，拼接成 统一文本格式（如 YYYY-MM-DD 的文本，而非日期类型）。 注意：若 IF 的条件不满足（value_if_false），默认返回 0，需后续处理无效值。 3️⃣. 添加一个汇总列，用 IF 进行汇总 目的：将步骤 2 中不同格式列的结果，统一合并到一列。 逻辑：用 IF 判断哪一列有有效文本（非空、非 0），将其值提取到汇总列。例如： =IF(格式列1<>"",<span...</p>
+
+    </article>
+    <article class="uk-article">
+        <a href="my-second-post12.html" class="uk-article-title uk-link-muted mg-list-title">使用 Pelican + GitHub Actions 搭建自动化静态博客全攻略</a>
+        <p class="uk-article-meta">
+            <time datetime="2025-04-03">2025年04月03日</time>
+        </p>
+        <p>一、环境准备（Windows/macOS/Linux通用） 1.1 安装基础工具链 安装Python 3.10+ # 安装Pelican及其依赖 pip install pelican markdown ghp-import 1.2 创建项目目录结构 创建一个以小写github用户名命名的项目目录并在终端打开 pelican-quickstart # 按默认配置快速生成项目骨架 在交互式提示中，您需要回答一些问题来配置您的博客。以下是一些建议的回答： 博客路径：直接按Enter使用当前目录 博客标题：输入您想要的博客标题，例如"我的技术博客" 博客作者：输入您的名字 博客语言：输入 [Chinese (Simplified)] 时区：输入 Asia/Shanghai 是否使用自定义URL：如果您有域名，输入 y ，否则输入 n 如果选择了自定义URL，输入您的域名 是否生成Makefile：输入 y 是否自动生成文章：输入 y 是否使用GitHub Pages：输入 y 是否使用GitHub项目页面：输入 y （这将使用 gh-pages 分支） 生成后的关键目录： ├── content/ # 原始文章存放地（Markdown格式） ├── output/ # 自动生成的静态文件 ├── pelicanconf.py # 主配置文件 └── Makefile # 自动化构建脚本 1.3 生成依赖文件 <span...</p>
+
+    </article>
+    <article class="uk-article">
+        <a href="my-first-post.html" class="uk-article-title uk-link-muted mg-list-title">我的第一篇博客文章</a>
+        <p class="uk-article-meta">
+            <time datetime="2025-04-02">2025年04月02日</time>
+        </p>
+        <p>欢迎来到我的博客 这是我使用Pelican创建的第一篇博客文章。Pelican是一个用Python编写的静态站点生成器，非常适合创建个人博客。 为什么选择Pelican？ 使用Python编写，易于扩展 支持Markdown和reStructuredText 主题可定制 可以轻松部署到GitHub Pages 代码示例 ```python def hello_world(): print("Hello, Pelican Blog!") hello_world()...</p>
+
+    </article>
+
+</div>
+ 
+    
+        <div class="uk-width-medium-1-5 uk-hidden-small">
+            
+            <div class="uk-panel uk-panel-box">
+                <form class="uk-search" action="search.html" data-uk-search>
+                    <input class="uk-search-field tipue_search" type="search" name="q" id="tipue_search_input" autocomplete="off" placeholder="Search...">
+                </form>
+            </div>
+
+            <div class="uk-panel uk-panel-box">
+                <ul class="uk-nav uk-nav-side">
+                    <li class="uk-nav-header">Categories</li>
+                    <li ><a href="https://unicornumr1314.github.io/category/ge-ren-jie-shao.html">个人介绍</a></li>
+                    <li ><a href="https://unicornumr1314.github.io/category/gong-ju.html">工具</a></li>
+                    <li ><a href="https://unicornumr1314.github.io/category/ji-zhu.html">技术</a></li>
+                    <li ><a href="https://unicornumr1314.github.io/category/sheng-huo-fen-xiang.html">生活分享</a></li>
+                    <li ><a href="https://unicornumr1314.github.io/category/shu-ju-fen-xi.html">数据分析</a></li>
+                    <li class="uk-nav-header">Pages</li>
+                    
+                    
+
+                    <li class="uk-nav-divider"></li>
+                    <li class="uk-active"><a href="https://unicornumr1314.github.io/archives.html">Archives</a></li>
+                </ul>
+            </div>
+
+            <div class="uk-panel uk-panel-box">
+                <h3 class="uk-panel-title">Receive Updates</h3>
+                <a rel="alternate" type="application/atom+xml" href="https://unicornumr1314.github.io/feeds/all.atom.xml" class="mg-feed"><i class="uk-icon-rss uk-icon-medium"></i> ATOM</a>
+            </div>
+            
+            <div class="uk-panel uk-panel-box">
+                <h3 class="uk-panel-title">Contacts</h3>
+                <a class="mg-icon-link" href="https://x.com/nicornU214610">
+                    <i class="uk-icon-twitter uk-icon-medium"></i>
+                </a>
+                <a class="mg-icon-link" href="https://github.com/UnicornUMR1314">
+                    <i class="uk-icon-github uk-icon-medium"></i>
+                </a>
+                <a class="mg-icon-link" href="https://youtube.com/channel/UCsQNS3huk3nB-SCOc7C-y8w?si=YKW4WsgDOzl2O8-o">
+                    <i class="uk-icon-youtube uk-icon-medium"></i>
+                </a>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</main>
+
+<footer class="mg-footer">
+    <div class="uk-container uk-container-center uk-text-center">
+
+        <div class="mg-icons-small uk-subnav uk-visible-small">
+            <li><a rel="alternate" type="application/atom+xml" href="https://unicornumr1314.github.io/feeds/all.atom.xml" class="uk-icon-button uk-icon-rss"></a></li>
+            <li>
+                <a href="https://x.com/nicornU214610" class="uk-icon-button uk-icon-twitter"></a>
+            </li>
+            <li>
+                <a href="https://github.com/UnicornUMR1314" class="uk-icon-button uk-icon-github"></a>
+            </li>
+            <li>
+                <a href="https://youtube.com/channel/UCsQNS3huk3nB-SCOc7C-y8w?si=YKW4WsgDOzl2O8-o" class="uk-icon-button uk-icon-youtube"></a>
+            </li>
+        </div>
+
+        <div class="mg-author uk-panel">
+            <p></p>
+
+            <p>Powered by <a href="http://blog.getpelican.com">Pelican</a>.<br class="uk-visible-small"> Theme <a href="https://github.com/lucachr/pelican-mg">mg</a> by <a href="https://github.com/lucachr">Luca Chiricozzi</a>.</p>
+        </div>
+    </div> 
+</footer>
+
+<div id="mg-offcanvas" class="uk-offcanvas">
+    <div class="uk-offcanvas-bar">
+
+        <form class="uk-search" action="search.html" data-uk-search>
+            <input class="uk-search-field" type="search" name="q" id="tipue_search_input" autocomplete="off" placeholder="Search...">
+        </form>
+
+        <ul class="uk-nav uk-nav-offcanvas" data-uk-nav>
+            <li class="uk-nav-header">Categories</li>
+            <li ><a href="https://unicornumr1314.github.io/category/ge-ren-jie-shao.html">个人介绍</a></li>
+            <li ><a href="https://unicornumr1314.github.io/category/gong-ju.html">工具</a></li>
+            <li ><a href="https://unicornumr1314.github.io/category/ji-zhu.html">技术</a></li>
+            <li ><a href="https://unicornumr1314.github.io/category/sheng-huo-fen-xiang.html">生活分享</a></li>
+            <li ><a href="https://unicornumr1314.github.io/category/shu-ju-fen-xi.html">数据分析</a></li>
+            <li class="uk-nav-header">Pages</li>        
+                    
+
+            <li class="uk-nav-divider"></li>
+            <li><a href="https://unicornumr1314.github.io/">Archives</a></li>
+        </ul>
+    </div>
+</div>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/uikit/2.15.0/js/uikit.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/uikit/2.15.0/js/components/search.min.js"></script>
+<script src="/theme/js/jquery.sticky-kit.js"></script>
+<script src="/theme/js/tipuesearch_set.js"></script>
+<script src="/theme/js/tipuesearch.js"></script>
+<script src="/theme/js/plugins.js"></script>
+<script src="/theme/js/main.js"></script>
+
+<script type="text/javascript">
+/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+var disqus_shortname = ''; // required: replace example with your forum shortname
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function () {
+ var s = document.createElement('script'); s.async = true;
+ s.type = 'text/javascript';
+ s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+ (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+ }());
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Uni星人的博客 - 个人介绍</title><link href="https://unicornumr1314.github.io/" rel="alternate"></link><link href="https://unicornumr1314.github.io/feeds/ge-ren-jie-shao.atom.xml" rel="self"></link><id>https://unicornumr1314.github.io/</id><updated>2025-06-11T10:00:00+08:00</updated><entry><title>个人介绍</title><link href="https://unicornumr1314.github.io/my-intro.html" rel="alternate"></link><published>2025-06-11T10:00:00+08:00</published><updated>2025-06-11T10:00:00+08:00</updated><author><name>您的名字</name></author><id>tag:unicornumr1314.github.io,2025-06-11:/my-intro.html</id><summary type="html">&lt;p&gt;个人介绍&lt;/p&gt;</summary><content type="html">&lt;h1&gt;个人介绍&lt;/h1&gt;
+&lt;h2&gt;教育背景&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;计算机本科&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;工作经历&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;自由职业者&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;技术技能&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;数据分析&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1&gt;联系我&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;邮箱：suifengzhuxia@qq.com&lt;/li&gt;
+&lt;/ul&gt;</content><category term="个人介绍"></category><category term="meta"></category></entry></feed>

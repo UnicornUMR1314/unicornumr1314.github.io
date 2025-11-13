@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Uni星人的博客 - 工具</title><link href="https://unicornumr1314.github.io/" rel="alternate"></link><link href="https://unicornumr1314.github.io/feeds/gong-ju.atom.xml" rel="self"></link><id>https://unicornumr1314.github.io/</id><updated>2025-11-13T10:00:00+08:00</updated><entry><title>删除 Word (.docx) 中的空行并合并连续换行 — dele_null_line.py 使用说明</title><link href="https://unicornumr1314.github.io/delete-docx-empty-lines-merge-newlines.html" rel="alternate"></link><published>2025-11-13T10:00:00+08:00</published><updated>2025-11-13T10:00:00+08:00</updated><author><name>Uni星人</name></author><id>tag:unicornumr1314.github.io,2025-11-13:/delete-docx-empty-lines-merge-newlines.html</id><summary type="html">&lt;p&gt;一个用于清理 Word (.docx) 文档中空段落并合并连续换行的轻量级 Python 工具，带 GUI 交互。&lt;/p&gt;</summary><content type="html">&lt;p&gt;本文介绍仓库内的脚本 &lt;code&gt;原始内容文档/dele_null_line.py&lt;/code&gt;，它可以自动删除 &lt;code&gt;.docx&lt;/code&gt; 文档中的空段落，并在非空段落中合并连续换行（将多个连续换行替换为一个）。脚本同时会处理表格单元格内的段落。&lt;/p&gt;
+&lt;p&gt;主要功能
+- 删除文档正文中空的段落（完全没有可见字符的段落）。
+- 在非空段落中把连续的 &lt;code&gt;\n&lt;/code&gt; 合并为单个 &lt;code&gt;\n&lt;/code&gt;，避免多余的空行或换行符导致格式混乱。
+- 遍历文档内的表格，按单元格同样规则清理空段落并合并换行。
+- 提供简单的 Tkinter GUI，交互选择输入/输出文件路径，适合非命令行用户。&lt;/p&gt;
+&lt;p&gt;依赖
+- 使用 &lt;code&gt;python-docx&lt;/code&gt;（包名 &lt;code&gt;python-docx&lt;/code&gt;）来读写 Word 文档。仓库中的脚本示例使用 &lt;code&gt;from docx import Document&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;安装&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;pip install python-docx
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;（如果要使用 live GUI，请确保当前 Python 环境包含 Tkinter。Windows 上自带标准 Python 通常包含 Tkinter。）&lt;/p&gt;
+&lt;p&gt;如何使用
+- 图形界面（推荐，脚本默认行为）:
+  - 运行脚本：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;  python 原始内容文档/dele_null_line.py
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;脚本会弹出文件选择对话框，请选择要处理的 &lt;code&gt;.docx&lt;/code&gt; 文件，并指定输出文件名。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;作为模块调用（在其他脚本中复用函数）:&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;from 原始内容文档.dele_null_line import remove_empty_lines_from_docx
+  remove_empty_lines_from_docx('input.docx', 'output.docx')&lt;/p&gt;
+&lt;p&gt;实现要点（供维护者参考）
+- 段落处理：脚本先遍历 &lt;code&gt;doc.paragraphs&lt;/code&gt;，把纯空的段落标记删除，非空段落使用正则 &lt;code&gt;re.sub(r"\n+","\n", text)&lt;/code&gt; 合并连续换行。
+- 表格处理：进入每个 &lt;code&gt;doc.tables&lt;/code&gt;，对每个单元格的 &lt;code&gt;cell.paragraphs&lt;/code&gt; 做同样的清理与合并。
+- 删除操作：对要删除的段落或单元格段落，使用底层 XML 节点 &lt;code&gt;._element.getparent().remove(...)&lt;/code&gt; 执行删除，避免改变段落集合时引发索引问题（通过反向索引删除）。&lt;/p&gt;
+&lt;p&gt;示例场景
+- 批量格式化从其他来源复制粘贴到 Word 的内容，常见于论文、报告或网页复制导致的多余空行。
+- 清理表格中因分行导致的冗余空段落，使单元格显示更整洁。&lt;/p&gt;
+&lt;p&gt;注意与限制
+- 脚本基于 &lt;code&gt;python-docx&lt;/code&gt; 的 API 操作，可能不会保留某些复杂样式或嵌入对象（图形/SmartArt 等）的精确格式。
+- 删除空段落是以“纯文本为空”为判断标准；如果某些段落仅包含空白字符或不可见字符（特殊控制符），会被视为空并删除。
+- 如果需要保留段落样式或分页断点，请在使用前备份原始文件。&lt;/p&gt;
+&lt;p&gt;改进建议
+- 增加批处理（对目录下所有 &lt;code&gt;.docx&lt;/code&gt; 文件递归处理）。
+- 增加可选参数：是否保留段落样式、是否只处理正文不处理表格、备份原文件等。
+- 在保存前增加简易的差异报告（列出删除的段落数、修改的单元格数），便于审计。&lt;/p&gt;
+&lt;p&gt;示例输出提示&lt;/p&gt;
+&lt;p&gt;脚本运行结束会打印：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;空行清理完成！输出文件：&amp;lt;output_path&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;（UI 模式下会用弹窗告知完成情况。）&lt;/p&gt;
+&lt;p&gt;完整代码如下:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;from&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nn"&gt;docx&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kn"&gt;import&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;Document&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nn"&gt;docx.enum.text&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kn"&gt;import&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;WD_PARAGRAPH_ALIGNMENT&lt;/span&gt;
+&lt;span class="kn"&gt;import&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nn"&gt;re&lt;/span&gt;
+
+&lt;span class="k"&gt;def&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nf"&gt;remove_empty_lines_from_docx&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;input_path&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;output_path&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="n"&gt;doc&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;Document&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;input_path&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="c1"&gt;# 段落：删除空段落，非空段落合并连续换行&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="n"&gt;paragraphs&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nb"&gt;list&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;doc&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;paragraphs&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="n"&gt;to_delete&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;[]&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="k"&gt;for&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;idx&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;p&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="ow"&gt;in&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nb"&gt;enumerate&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;paragraphs&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="n"&gt;text&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;p&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;text&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="ow"&gt;or&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&amp;quot;&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="k"&gt;if&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;text&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;strip&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;==&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="w"&gt;            &lt;/span&gt;&lt;span class="n"&gt;to_delete&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;append&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;idx&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="k"&gt;else&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="w"&gt;            &lt;/span&gt;&lt;span class="n"&gt;p&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;text&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;re&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sub&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sa"&gt;r&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;\n+&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;text&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="k"&gt;for&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;idx&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="ow"&gt;in&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nb"&gt;reversed&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;to_delete&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="n"&gt;paragraphs&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;idx&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;_element&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;getparent&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;remove&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;paragraphs&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;idx&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;_element&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="c1"&gt;# 表格：删除单元格内空段落，非空段落合并连续换行&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="k"&gt;for&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;table&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="ow"&gt;in&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;doc&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;tables&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="k"&gt;for&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;row&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="ow"&gt;in&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;table&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;rows&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="w"&gt;            &lt;/span&gt;&lt;span class="k"&gt;for&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;cell&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="ow"&gt;in&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;row&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;cells&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="w"&gt;                &lt;/span&gt;&lt;span class="n"&gt;cell_paras&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nb"&gt;list&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;cell&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;paragraphs&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="w"&gt;                &lt;/span&gt;&lt;span class="n"&gt;del_idxs&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;[]&lt;/span&gt;
+&lt;span class="w"&gt;                &lt;/span&gt;&lt;span class="k"&gt;for&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;cp&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="ow"&gt;in&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nb"&gt;enumerate&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;cell_paras&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+&lt;span class="w"&gt;                    &lt;/span&gt;&lt;span class="n"&gt;txt&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;cp&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;text&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="ow"&gt;or&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&amp;quot;&lt;/span&gt;
+&lt;span class="w"&gt;                    &lt;/span&gt;&lt;span class="k"&gt;if&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;txt&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;strip&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;==&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="w"&gt;                        &lt;/span&gt;&lt;span class="n"&gt;del_idxs&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;append&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="w"&gt;                    &lt;/span&gt;&lt;span class="k"&gt;else&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="w"&gt;                        &lt;/span&gt;&lt;span class="n"&gt;cp&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;text&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;re&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sub&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sa"&gt;r&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;\n+&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;txt&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="w"&gt;                &lt;/span&gt;&lt;span class="k"&gt;for&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="ow"&gt;in&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nb"&gt;reversed&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;del_idxs&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+&lt;span class="w"&gt;                    &lt;/span&gt;&lt;span class="n"&gt;cell_paras&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;_element&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;getparent&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;remove&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;cell_paras&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;_element&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="n"&gt;doc&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;save&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;output_path&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sa"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;空行清理完成！输出文件：&lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="n"&gt;output_path&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="c1"&gt;# ------------------- 调用示例 -------------------&lt;/span&gt;
+&lt;span class="kn"&gt;import&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nn"&gt;tkinter&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;as&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nn"&gt;tk&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nn"&gt;tkinter&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kn"&gt;import&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;filedialog&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;messagebox&lt;/span&gt;
+
+
+&lt;span class="c1"&gt;# 中文注释：通过图形界面选择输入与输出的 .docx 文件并执行清理&lt;/span&gt;
+&lt;span class="k"&gt;def&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nf"&gt;main&lt;/span&gt;&lt;span class="p"&gt;():&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="k"&gt;try&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="n"&gt;root&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;tk&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Tk&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="n"&gt;root&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;withdraw&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="n"&gt;input_path&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;filedialog&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;askopenfilename&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+&lt;span class="w"&gt;            &lt;/span&gt;&lt;span class="n"&gt;title&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;选择输入 .docx 文件&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;            &lt;/span&gt;&lt;span class="n"&gt;filetypes&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;[(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Word 文档&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;*.docx&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)]&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="k"&gt;if&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="ow"&gt;not&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;input_path&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="w"&gt;            &lt;/span&gt;&lt;span class="n"&gt;messagebox&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;showwarning&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;提示&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;未选择输入文件，已取消。&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="w"&gt;            &lt;/span&gt;&lt;span class="k"&gt;return&lt;/span&gt;
+
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="n"&gt;output_path&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;filedialog&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;asksaveasfilename&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+&lt;span class="w"&gt;            &lt;/span&gt;&lt;span class="n"&gt;title&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;选择输出 .docx 文件&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;            &lt;/span&gt;&lt;span class="n"&gt;defaultextension&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;.docx&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="w"&gt;            &lt;/span&gt;&lt;span class="n"&gt;filetypes&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;[(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Word 文档&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;*.docx&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)]&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="k"&gt;if&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="ow"&gt;not&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;output_path&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="w"&gt;            &lt;/span&gt;&lt;span class="n"&gt;messagebox&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;showwarning&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;提示&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;未选择输出文件，已取消。&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="w"&gt;            &lt;/span&gt;&lt;span class="k"&gt;return&lt;/span&gt;
+
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="n"&gt;remove_empty_lines_from_docx&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;input_path&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;output_path&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="n"&gt;messagebox&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;showinfo&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;完成&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="sa"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;空行清理完成！&lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s2"&gt;输出文件：&lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="n"&gt;output_path&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="k"&gt;except&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;Exception&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;as&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="k"&gt;try&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="w"&gt;            &lt;/span&gt;&lt;span class="n"&gt;messagebox&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;showerror&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;错误&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="sa"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;处理失败：&lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="k"&gt;except&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;Exception&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="w"&gt;            &lt;/span&gt;&lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sa"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;处理失败：&lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+
+&lt;span class="k"&gt;if&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="vm"&gt;__name__&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;==&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;__main__&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="n"&gt;main&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content><category term="工具"></category><category term="python"></category><category term="docx"></category><category term="文档处理"></category></entry></feed>
