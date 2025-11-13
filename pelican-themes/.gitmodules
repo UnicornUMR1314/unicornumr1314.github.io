@@ -34,6 +34,9 @@
 [submodule "lannisport"]
 	path = lannisport
 	url = https://github.com/siovene/lannisport.git
+[submodule "Editorial"]
+	path = Editorial
+	url = https://gitlab.com/Mimoza/editorial.git
 [submodule "fresh"]
 	path = fresh
 	url = https://github.com/jsliang/pelican-fresh.git
@@ -264,3 +267,6 @@
 [submodule "Piccolo"]
 	path = piccolo
 	url = https://github.com/iamjameswalters/piccolo.git
+[submodule "WhatsTheScoop"]
+	path = WhatsTheScoop
+	url = git@github.com:SarahRogue81/WhatsTheScoop.git
