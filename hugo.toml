@@ -1,6 +1,10 @@
 
+baseURL = "https://unicornumr1314.github.io/"
+title = "Uni星人"
+languageCode = "en"
+
+theme = "DoIt"
+
 [caches]
   [caches.images]
     dir = ':cacheDir/images'
-    
-theme = "DoIt"
