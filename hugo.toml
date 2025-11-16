@@ -1,7 +1,7 @@
 
 baseURL = "https://unicornumr1314.github.io/"
 title = "Uni星人"
-languageCode = "en"
+languageCode = "zh-CN"
 
 theme = "DoIt"
 defaultContentLanguage = "zh-cn"
