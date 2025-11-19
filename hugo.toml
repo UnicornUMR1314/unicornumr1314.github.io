@@ -141,6 +141,7 @@ Twitter = ""
  Instagram = ""
 
 defaultContentLanguage = "zh-cn"
+defaultContentLanguageInSubdir = true
 
 [languages]
   [languages.en]
