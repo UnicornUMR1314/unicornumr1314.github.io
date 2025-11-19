@@ -84,6 +84,32 @@ seriesNavigation = true
         h4 = "{h2}.{h3}.{h4} {title}"
         h5 = "{h2}.{h3}.{h4}.{h5} {title}"
         h6 = "{h2}.{h3}.{h4}.{h5}.{h6} {title}"
+  [params.page.toc]
+    enable = true
+    keepStatic = false
+    auto = true
+  [params.page.table]
+    sort = true
+  [params.page.instantpage]
+    enable = true
+  [params.page.math]
+    enable = true
+    blockLeftDelimiter = "\\["
+    blockRightDelimiter = "\\]"
+    inlineLeftDelimiter = "\\("
+    inlineRightDelimiter = "\\)"
+    copyTex = true
+    mhchem = true
+  [params.page.plantuml]
+    server = "https://www.plantuml.com/plantuml"
+  [params.page.share]
+    enable = true
+    Weibo = true
+    Twitter = true
+    Telegram = true
+    Line = true
+    HackerNews = true
+    Mastodon = true
 
 [params.home]
 rss = 10
@@ -103,6 +129,16 @@ RSS = true
 Zhihu = ""
 Bilibili = ""
 Twitter = ""
+ Weibo = ""
+ Telegram = ""
+ Email = ""
+ Linkedin = ""
+ Mastodon = ""
+ QQ = ""
+ WeChat = ""
+ Steam = ""
+ Reddit = ""
+ Instagram = ""
 
 defaultContentLanguage = "zh-cn"
 
@@ -253,6 +289,15 @@ home = ["HTML", "RSS", "JSON"]
 page = ["HTML", "MarkDown"]
 section = ["HTML", "RSS"]
 taxonomy = ["HTML", "RSS"]
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.extensions]
+      [markup.goldmark.extensions.passthrough]
+        enable = true
+        [markup.goldmark.extensions.passthrough.delimiters]
+          block = [["\\[", "\\]"]]
+          inline = [["\\(", "\\)"]]
 
 [caches]
   [caches.images]
