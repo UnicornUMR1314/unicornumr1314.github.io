@@ -5,6 +5,10 @@ languageCode = "zh-CN"
 
 theme = "DoIt"
 
+[params]
+enablePWA = true
+fingerprint = "sha512"
+
 [params.search]
 enable = true
 type = "fuse"
