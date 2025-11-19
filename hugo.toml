@@ -5,6 +5,25 @@ languageCode = "zh-CN"
 
 theme = "DoIt"
 
+[params.search]
+enable = true
+type = "fuse"
+maxResultLength = 10
+highlightTag = "mark"
+absoluteURL = false
+contentLength = 400
+
+[params.search.fuse]
+isCaseSensitive = false
+minMatchCharLength = 2
+findAllMatches = false
+location = 0
+threshold = 0.3
+distance = 100
+ignoreLocation = true
+useExtendedSearch = false
+ignoreFieldNorm = false
+
 [params.page.comment]
 enable = true
 
@@ -87,6 +106,12 @@ defaultContentLanguage = "zh-cn"
       url = "/categories/"
       title = ""
       weight = 3
+
+[outputs]
+home = ["HTML", "RSS", "JSON"]
+page = ["HTML", "MarkDown"]
+section = ["HTML", "RSS"]
+taxonomy = ["HTML", "RSS"]
 
 [caches]
   [caches.images]
