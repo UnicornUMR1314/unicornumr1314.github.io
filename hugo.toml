@@ -5,6 +5,25 @@ languageCode = "zh-CN"
 
 theme = "DoIt"
 
+[params.page.comment]
+enable = true
+
+[params.page.comment.giscus]
+enable = true
+dataRepo = "UnicornUMR1314/unicornumr1314.github.io"
+dataRepoId = "R_kgDOOTJ8uw"
+dataCategory = "General"
+dataCategoryId = "DIC_kwDOOTJ8u84CoxOQ"
+dataMapping = "pathname"
+dataStrict = "0"
+dataReactionsEnabled = "1"
+dataEmitMetadata = "0"
+dataInputPosition = "bottom"
+lightTheme = "light"
+darkTheme = "dark"
+dataLang = "zh-CN"
+dataLoading = "lazy"
+
 defaultContentLanguage = "zh-cn"
 
 [languages]
