@@ -124,6 +124,12 @@ rss = 10
   typeit = false
   social = true
 
+[params.analytics]
+enable = true
+  [params.analytics.google]
+  id = "G-ZSG7289ZNL"
+  anonymizeIP = true
+
 [params.social]
 GitHub = "UnicornUMR1314"
 RSS = true
