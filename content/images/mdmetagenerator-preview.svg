@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+<rect width="1200" height="630" fill="#0d1117"/>
+<rect x="80" y="90" width="1040" height="450" rx="22" fill="#161b22" stroke="#30363d" stroke-width="4"/>
+<text x="120" y="220" fill="#58a6ff" font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif" font-size="64" font-weight="700">MDMetaGenerator</text>
+<text x="120" y="300" fill="#8b949e" font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif" font-size="32">Markdown 元信息创建生成器（带 UI）</text>
+<text x="120" y="370" fill="#c9d1d9" font-family="Consolas, Menlo, Monaco, monospace" font-size="28">summary <!--more--> body • Hugo/DoIt compatible</text>
+</svg>
