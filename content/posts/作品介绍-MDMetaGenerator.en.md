@@ -12,7 +12,7 @@ categories: ["Portfolio"]
 series: ["Tools & Automation"]
 
 featuredImage: "/images/mdmetagenerator-cover.svg"
-featuredImagePreview: "/images/mdmetagenerator-preview.svg"
+featuredImagePreview: "/images/mdmetagenerator-preview.png"
 
 toc:
   enable: true

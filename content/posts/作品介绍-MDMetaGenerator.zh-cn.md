@@ -12,7 +12,7 @@ categories: ["作品集"]
 series: ["工具与自动化"]
 
 featuredImage: "/images/mdmetagenerator-cover.svg"
-featuredImagePreview: "/images/mdmetagenerator-preview.svg"
+featuredImagePreview: "/images/mdmetagenerator-preview.png"
 
 toc:
   enable: true
