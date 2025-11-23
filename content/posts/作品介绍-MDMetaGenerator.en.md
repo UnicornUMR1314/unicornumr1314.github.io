@@ -11,8 +11,8 @@ tags: ["Project", "Tool", "Open Source", "Markdown", "Hugo"]
 categories: ["Portfolio"]
 series: ["Tools & Automation"]
 
-featuredImage: "/posts/images/mdmetagenerator-cover.svg"
-featuredImagePreview: "/posts/images/mdmetagenerator-preview.png"
+featuredImage: "/posts/image/mdmetagenerator-cover.svg"
+featuredImagePreview: "/posts/image/mdmetagenerator-preview.png"
 
 toc:
   enable: true
