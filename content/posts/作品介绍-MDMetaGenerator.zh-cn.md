@@ -11,7 +11,7 @@ tags: ["作品", "工具", "开源", "Markdown", "Hugo"]
 categories: ["作品集"]
 series: ["工具与自动化"]
 
-featuredImage: "/posts/image/mdmetagenerator-cover.svg"
+featuredImage: "/posts/image/mdmetagenerator-cover.png"
 featuredImagePreview: "/posts/image/mdmetagenerator-preview.png"
 
 toc:
