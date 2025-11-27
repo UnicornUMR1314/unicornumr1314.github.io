@@ -9,7 +9,6 @@ description: 表单化生成 Markdown 文章的元信息、摘要分隔与路径
 
 tags: ["作品", "工具", "开源", "Markdown", "Hugo"]
 categories: ["作品集"]
-series: []
 
 featuredImage: "/posts/image/mdmetagenerator-cover.png"
 featuredImagePreview: "/posts/image/mdmetagenerator-preview.png"
