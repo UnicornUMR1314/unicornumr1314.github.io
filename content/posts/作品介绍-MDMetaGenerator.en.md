@@ -9,7 +9,7 @@ description: "Generate article Front Matter, summary separator, and file naming 
 
 tags: ["Project", "Tool", "Open Source", "Markdown", "Hugo"]
 categories: ["Portfolio"]
-series: ["Tools & Automation"]
+series: []
 
 featuredImage: "/posts/image/mdmetagenerator-cover.png"
 featuredImagePreview: "/posts/image/mdmetagenerator-preview.png"
