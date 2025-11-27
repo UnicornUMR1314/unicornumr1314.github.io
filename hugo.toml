@@ -3,7 +3,9 @@ baseURL = "https://unicornumr1314.github.io/"
 title = "Uni星人"
 languageCode = "zh-CN"
 
-theme = "DoIt"
+[module]
+  [[module.imports]]
+    path = "github.com/HEIGE-PCloud/DoIt"
 
 [params]
 enablePWA = true
@@ -181,11 +183,11 @@ defaultContentLanguageInSubdir = false
       title = ""
       weight = 3
     [[languages.en.menu.main]]
-      identifier = "series"
+      identifier = "portfolio"
       pre = ""
       post = ""
-      name = "Series"
-      url = "/series/"
+      name = "Portfolio"
+      url = "/categories/portfolio/"
       title = ""
       weight = 4
     [[languages.en.menu.main]]
@@ -252,11 +254,11 @@ defaultContentLanguageInSubdir = false
       title = ""
       weight = 3
     [[languages.zh-cn.menu.main]]
-      identifier = "series"
+      identifier = "portfolio"
       pre = ""
       post = ""
-      name = "系列"
-      url = "/series/"
+      name = "作品集"
+      url = "/categories/作品集/"
       title = ""
       weight = 4
     [[languages.zh-cn.menu.main]]
