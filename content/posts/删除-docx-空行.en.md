@@ -12,4 +12,4 @@ Introduces a Python script to remove empty paragraphs in `.docx` and merge conse
 - Modes: GUI picker or import function
 - Example: `remove_empty_lines_from_docx('input.docx','output.docx')`
  
-下载：[dele_null_line.py](./static/tools/dele_null_line.py)
+下载：[dele_null_line.py](../static/tools/dele_null_line.py)

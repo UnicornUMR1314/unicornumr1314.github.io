@@ -10,7 +10,7 @@ tags = ['工具', 'Jupyter', 'Markdown']
 
 - 功能要点：浏览器端解析、生成 Markdown 文本
 - 适用场景：将 Notebook 内容迁移到博客/文档系统
-- [直接打开工具](./static/tools/ipynb转化为md(网页版).html)
+- [直接打开工具](../static/tools/ipynb转化为md(网页版).html)
 
 使用方式：
 
