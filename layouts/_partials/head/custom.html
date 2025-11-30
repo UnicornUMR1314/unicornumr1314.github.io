@@ -24,6 +24,11 @@
     if (path === '/' || path === '') {
       document.documentElement.setAttribute('lang','zh-CN');
     }
+    if (path.indexOf('/zh-cn/') === 0) {
+      var np = path.replace(/^\/zh-cn/, '') || '/';
+      location.replace(np + (location.search || '') + (location.hash || ''));
+      return;
+    }
     if (path.indexOf('/en/') === 0 && direct) {
       location.replace('/');
     }
