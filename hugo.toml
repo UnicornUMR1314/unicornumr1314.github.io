@@ -28,7 +28,7 @@ themeChangeMode = "select"
 
 [params.footer]
 enable = true
-custom = ''
+custom = '<a href="/sitemap.xml" rel="nofollow">网站地图</a>'
 hugo = true
 hostedOn = ''
 copyright = true
@@ -223,7 +223,10 @@ defaultContentLanguageInSubdir = false
       url = "https://github.com/UnicornUMR1314"
       title = "GitHub"
       weight = 9
-  [languages.en]
+
+    [languages.zh-cn.params.footer]
+      custom = '<a href="/sitemap.xml" rel="nofollow">网站地图</a>'
+[languages.en]
     weight = 2
     title = "Uni Alien"
     languageCode = "en"
@@ -293,8 +296,11 @@ defaultContentLanguageInSubdir = false
       title = "GitHub"
       weight = 9
 
+    [languages.en.params.footer]
+      custom = '<a href="/en/sitemap.xml" rel="nofollow">Sitemap</a>'
+
 [outputs]
-home = ["HTML", "RSS", "JSON"]
+home = ["HTML", "RSS", "JSON", "SITEMAP"]
 page = ["HTML", "MarkDown"]
 section = ["HTML", "RSS"]
 taxonomy = ["HTML", "RSS"]
