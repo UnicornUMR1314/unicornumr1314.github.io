@@ -2,4 +2,3 @@ User-agent: *
 Allow: /
 Sitemap: https://unicornumr1314.github.io/sitemap.xml
 Sitemap: https://unicornumr1314.github.io/en/sitemap.xml
-Sitemap: https://unicornumr1314.github.io/zh-cn/sitemap.xml
