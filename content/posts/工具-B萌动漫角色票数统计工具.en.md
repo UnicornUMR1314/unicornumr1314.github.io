@@ -12,4 +12,4 @@ Counts votes per character by splitting input text with `》` and extracting ent
 - Accumulative counting and error hints
 - Export results as `txt`
 
-[Open tool](/static/tools/B萌动漫角色票数统计工具.html)
+[Open tool](./static/tools/B萌动漫角色票数统计工具.html)

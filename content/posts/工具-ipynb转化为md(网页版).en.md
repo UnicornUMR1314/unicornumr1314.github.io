@@ -11,4 +11,4 @@ Converts Jupyter Notebook (`.ipynb`) content to Markdown (`.md`) in the browser 
 - Client-side parsing and generation
 - Copy generated Markdown and save as `.md`
 
-[Open tool](/static/tools/ipynb转化为md(网页版).html)
+[Open tool](./static/tools/ipynb转化为md(网页版).html)
