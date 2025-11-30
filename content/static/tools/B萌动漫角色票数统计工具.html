@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>动漫角色票数统计工具</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Tailwind配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4F46E5',
+                        secondary: '#10B981',
+                        neutral: '#1F2937',
+                        warning: '#F59E0B',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .transition-smooth {
+                transition: all 0.3s ease-in-out;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <!-- 页面标题 -->
+        <header class="text-center mb-10">
+            <h1 class="text-[clamp(1.8rem,5vw,3rem)] font-bold text-neutral mb-2">
+                <i class="fa fa-bar-chart text-primary mr-3"></i>动漫角色票数统计工具
+            </h1>
+            <p class="text-gray-600 text-lg">合并文本后按"》"分组，统计每组中的角色票数</p>
+        </header>
+        
+        <!-- 主内容区和说明区容器 -->
+        <div class="flex flex-col md:flex-row gap-6 mb-8">
+            <!-- 主内容区 -->
+            <main class="bg-white rounded-xl shadow-lg p-6 md:p-8 flex-1">
+                <!-- 文本输入区域 -->
+                <div class="mb-8">
+                    <label for="text-input" class="block text-gray-700 font-medium mb-3 text-lg">请输入或粘贴文本：</label>
+                    <div class="relative">
+                        <textarea 
+                            id="text-input" 
+                            class="w-full h-64 p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-smooth resize-none"
+                            placeholder="在此粘贴需要统计的文本，例如：
+比企谷八幡 2票 经典/燃 《我的青春恋爱...》》雪之下雪乃 3票 经典/萌 《我的青春...》》
+由比滨结衣 2票 经典/萌 《我的青春恋爱...》》比企谷八幡 1票 经典/燃 《我的青春...》
+"
+                        ></textarea>
+                        <button 
+                            id="clear-btn" 
+                            class="absolute right-3 top-3 text-gray-400 hover:text-gray-600 transition-smooth"
+                            title="清空"
+                        >
+                            <i class="fa fa-times-circle text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 操作按钮 -->
+                <div class="flex flex-col sm:flex-row gap-4 mb-8">
+                    <button 
+                        id="stats-btn" 
+                        class="flex-1 bg-primary hover:bg-primary/90 text-white font-semibold py-3 px-6 rounded-lg transition-smooth flex items-center justify-center"
+                    >
+                        <i class="fa fa-check-circle mr-2"></i>确认统计（累加）
+                    </button>
+                    <button 
+                        id="reset-btn" 
+                        class="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-6 rounded-lg transition-smooth flex items-center justify-center"
+                    >
+                        <i class="fa fa-refresh mr-2"></i>重置统计
+                    </button>
+                    <button 
+                        id="download-btn" 
+                        class="flex-1 bg-secondary hover:bg-secondary/90 text-white font-semibold py-3 px-6 rounded-lg transition-smooth flex items-center justify-center"
+                    >
+                        <i class="fa fa-download mr-2"></i>下载结果
+                    </button>
+                </div>
+                
+                <!-- 分组预览 -->
+                <div class="mt-6 mb-6">
+                    <h2 class="text-xl font-semibold text-gray-700 mb-4 flex items-center">
+                        <i class="fa fa-th-list text-primary mr-2"></i>分组预览
+                    </h2>
+                    <div id="groups-preview" class="border border-gray-200 rounded-lg p-4 max-h-40 overflow-y-auto bg-gray-50 text-sm">
+                        <p class="text-gray-500 italic text-center py-4">暂无分组数据</p>
+                    </div>
+                </div>
+                
+                <!-- 统计结果预览 -->
+                <div class="mt-8">
+                    <h2 class="text-xl font-semibold text-gray-700 mb-4 flex items-center">
+                        <i class="fa fa-list-alt text-primary mr-2"></i>统计结果预览
+                    </h2>
+                    <div id="stats-preview" class="border border-gray-200 rounded-lg p-4 max-h-60 overflow-y-auto bg-gray-50">
+                        <p class="text-gray-500 italic text-center py-8">暂无统计数据，请输入文本并点击"确认统计"</p>
+                    </div>
+                    <!-- 解析错误提示区域 -->
+                    <div id="parse-error" class="mt-4 text-red-500 text-sm hidden"></div>
+                </div>
+            </main>
+            
+            <!-- 说明区域 -->
+            <div class="md:w-64 flex-shrink-0">
+                <div class="bg-white rounded-xl shadow-lg p-6 h-full">
+                    <!-- 格式说明 -->
+                    <p class="text-gray-700 text-center text-base font-medium mb-4 border-b pb-2">
+                        统计规则说明
+                    </p>
+                    
+                    <ul class="text-gray-600 text-sm space-y-3 mb-6">
+                        <li class="flex items-start">
+                            <i class="fa fa-check-circle text-primary mr-2 mt-1"></i>
+                            <span>先将所有文本合并为一行</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-check-circle text-primary mr-2 mt-1"></i>
+                            <span>按"》"分割为多个分组</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-check-circle text-primary mr-2 mt-1"></i>
+                            <span>每组中提取"角色名 数字票"格式</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-check-circle text-primary mr-2 mt-1"></i>
+                            <span>支持多次输入，自动累加票数</span>
+                        </li>
+                    </ul>
+                    
+                    <!-- 统计信息 -->
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <p class="text-gray-700 font-medium mb-2">统计摘要</p>
+                        <p id="total-characters" class="text-gray-600 text-sm">总角色数：0</p>
+                        <p id="total-votes" class="text-gray-600 text-sm">总得票数：0</p>
+                        <p id="total-groups" class="text-gray-600 text-sm">总组数：0</p>
+                        <p id="total-entries" class="text-gray-600 text-sm">有效条目：0</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 提示信息 -->
+        <div id="notification" class="fixed bottom-6 right-6 px-6 py-3 rounded-lg shadow-lg transform translate-y-20 opacity-0 transition-smooth pointer-events-none"></div>
+        
+        <!-- 页脚 -->
+        <footer class="text-center text-gray-500 text-sm">
+            <p>© 2025 动漫角色票数统计工具</p>
+        </footer>
+    </div>
+
+    <script>
+        // 存储统计结果的字典（角色名: 累计票数）
+        let voteStats = {};
+        // 统计有效条目数量
+        let totalEntries = 0;
+        // 统计总得票数
+        let totalVotes = 0;
+        // 统计总组数
+        let totalGroups = 0;
+        
+        // DOM元素
+        const textInput = document.getElementById('text-input');
+        const statsBtn = document.getElementById('stats-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        const downloadBtn = document.getElementById('download-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const statsPreview = document.getElementById('stats-preview');
+        const groupsPreview = document.getElementById('groups-preview');
+        const parseError = document.getElementById('parse-error');
+        const notification = document.getElementById('notification');
+        const totalCharactersEl = document.getElementById('total-characters');
+        const totalVotesEl = document.getElementById('total-votes');
+        const totalEntriesEl = document.getElementById('total-entries');
+        const totalGroupsEl = document.getElementById('total-groups');
+        
+        // 显示通知
+        function showNotification(message, type = 'success') {
+            notification.textContent = message;
+            notification.className = 'fixed bottom-6 right-6 px-6 py-3 rounded-lg shadow-lg transform translate-y-0 opacity-100 transition-smooth';
+            
+            switch(type) {
+                case 'success':
+                    notification.classList.add('bg-green-500', 'text-white');
+                    break;
+                case 'error':
+                    notification.classList.add('bg-red-500', 'text-white');
+                    break;
+                case 'warning':
+                    notification.classList.add('bg-warning', 'text-white');
+                    break;
+            }
+            
+            setTimeout(() => {
+                notification.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+        
+        // 按"》"分割文本为多个组
+        function splitIntoGroups(text) {
+            // 1. 合并所有文本为一行，去除多余空白
+            const combined = text.replace(/\s+/g, ' ').trim();
+            
+            // 2. 按"》"分割为多个组
+            const groups = combined.split('》')
+                .map(group => group.trim())
+                .filter(group => group !== ''); // 过滤空组
+                
+            return groups;
+        }
+        
+        // 显示分组预览
+        function showGroupsPreview(groups) {
+            if (groups.length === 0) {
+                groupsPreview.innerHTML = '<p class="text-gray-500 italic text-center py-4">暂无分组数据</p>';
+                return;
+            }
+            
+            let html = '<ul class="space-y-2">';
+            groups.forEach((group, index) => {
+                html += `<li class="p-2 bg-gray-50 rounded border border-gray-100">
+                    <span class="text-xs text-gray-500">组 ${index + 1}:</span>
+                    <div class="truncate">${group}</div>
+                </li>`;
+            });
+            html += '</ul>';
+            
+            groupsPreview.innerHTML = html;
+        }
+        
+        // 从分组中提取并解析角色和票数
+        function extractFromGroups(groups) {
+            const results = [];
+            const errors = [];
+            
+            groups.forEach((group, groupIndex) => {
+                // 正则表达式匹配角色名和票数（格式：角色名 数字票）
+                const regex = /(.*?)\s+(\d+\.?\d*)\s*票/;
+                const match = group.match(regex);
+                
+                if (match) {
+                    const role = match[1].trim();
+                    const votes = parseFloat(match[2]);
+                    
+                    if (!isNaN(votes) && role) {
+                        results.push({ role, votes, group: groupIndex + 1 });
+                    } else {
+                        errors.push(`第 ${groupIndex + 1} 组："${group}" 格式错误（数字无效或角色名为空）`);
+                    }
+                } else {
+                    errors.push(`第 ${groupIndex + 1} 组："${group}" 无法解析（请确保包含"角色名 数字票"格式）`);
+                }
+            });
+            
+            return { results, errors };
+        }
+        
+        // 更新统计结果
+        function updateVoteStats(results) {
+            results.forEach(({ role, votes }) => {
+                if (voteStats.hasOwnProperty(role)) {
+                    voteStats[role] += votes;
+                } else {
+                    voteStats[role] = votes;
+                }
+                
+                totalVotes += votes;
+            });
+            
+            totalEntries += results.length;
+            totalGroups += results.length; // 每组最多统计一个有效条目
+        }
+        
+        // 更新统计结果预览
+        function updateStatsPreview() {
+            const characterCount = Object.keys(voteStats).length;
+            
+            // 更新统计摘要
+            totalCharactersEl.textContent = `总角色数：${characterCount}`;
+            totalVotesEl.textContent = `总得票数：${totalVotes.toFixed(1)}`;
+            totalEntriesEl.textContent = `有效条目：${totalEntries}`;
+            totalGroupsEl.textContent = `总组数：${totalGroups}`;
+            
+            if (characterCount === 0) {
+                statsPreview.innerHTML = '<p class="text-gray-500 italic text-center py-8">暂无统计数据，请输入文本并点击"确认统计"</p>';
+                return;
+            }
+            
+            // 按票数降序排序
+            const sortedEntries = Object.entries(voteStats)
+                .sort((a, b) => b[1] - a[1]);
+            
+            let html = '<div class="grid grid-cols-1 md:grid-cols-2 gap-2">';
+            sortedEntries.forEach(([role, votes]) => {
+                // 保留一位小数（如果是整数则显示整数）
+                const displayVotes = votes % 1 === 0 ? votes.toFixed(0) : votes.toFixed(1);
+                html += `
+                    <div class="flex justify-between items-center p-2 hover:bg-gray-100 rounded transition-smooth">
+                        <span class="font-medium">${role}</span>
+                        <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">${displayVotes} 票</span>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            
+            statsPreview.innerHTML = html;
+        }
+        
+        // 处理统计按钮点击
+        statsBtn.addEventListener('click', () => {
+            const text = textInput.value.trim();
+            parseError.classList.add('hidden');
+            parseError.textContent = '';
+            
+            if (!text) {
+                showNotification('请输入或粘贴文本后再进行统计', 'error');
+                return;
+            }
+            
+            // 1. 分割文本为多个组
+            const groups = splitIntoGroups(text);
+            showGroupsPreview(groups);
+            
+            if (groups.length === 0) {
+                showNotification('未找到有效分组，请检查文本格式', 'error');
+                return;
+            }
+            
+            // 2. 从分组中提取角色和票数
+            const { results, errors } = extractFromGroups(groups);
+            
+            if (errors.length > 0) {
+                parseError.classList.remove('hidden');
+                parseError.innerHTML = `解析错误：<br>${errors.join('<br>')}`;
+            }
+            
+            if (results.length === 0 && errors.length > 0) {
+                showNotification('未解析到有效数据，请检查输入格式', 'error');
+                return;
+            }
+            
+            // 3. 更新统计结果（累加）
+            updateVoteStats(results);
+            updateStatsPreview();
+            
+            // 清空输入框，方便下次输入
+            textInput.value = '';
+            textInput.focus();
+            
+            showNotification(`成功统计到 ${results.length} 条有效数据，已累加至总结果`);
+        });
+        
+        // 重置统计按钮点击事件
+        resetBtn.addEventListener('click', () => {
+            // 重置所有统计数据
+            voteStats = {};
+            totalEntries = 0;
+            totalVotes = 0;
+            totalGroups = 0;
+            
+            // 清空输入和错误提示
+            textInput.value = '';
+            parseError.classList.add('hidden');
+            groupsPreview.innerHTML = '<p class="text-gray-500 italic text-center py-4">暂无分组数据</p>';
+            
+            // 更新预览
+            updateStatsPreview();
+            
+            showNotification('统计数据已重置');
+            textInput.focus();
+        });
+        
+        // 清空按钮点击事件
+        clearBtn.addEventListener('click', () => {
+            textInput.value = '';
+            parseError.classList.add('hidden');
+            textInput.focus();
+        });
+        
+        // 获取当前日期（YYYYMMDD格式）
+        function getCurrentDate() {
+            const date = new Date();
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}${month}${day}`;
+        }
+        
+        // 下载统计结果
+        downloadBtn.addEventListener('click', () => {
+            if (Object.keys(voteStats).length === 0) {
+                showNotification('暂无统计数据可下载', 'error');
+                return;
+            }
+            
+            // 准备文件内容
+            let fileContent = '动漫角色票数统计结果\n';
+            fileContent += `统计日期: ${new Date().toLocaleString()}\n`;
+            fileContent += `总角色数: ${Object.keys(voteStats).length} | 总得票数: ${totalVotes.toFixed(1)} | 总组数: ${totalGroups}\n\n`;
+            
+            // 按票数降序排序
+            const sortedEntries = Object.entries(voteStats)
+                .sort((a, b) => b[1] - a[1]);
+            
+            sortedEntries.forEach(([role, votes]) => {
+                const displayVotes = votes % 1 === 0 ? votes.toFixed(0) : votes.toFixed(1);
+                fileContent += `${role}: ${displayVotes} 票\n`;
+            });
+            
+            // 创建文件并下载
+            const blob = new Blob([fileContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `角色票数统计${getCurrentDate()}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            
+            // 清理
+            setTimeout(() => {
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }, 0);
+            
+            showNotification('统计结果已成功下载');
+        });
+        
+        // 初始化
+        updateStatsPreview();
+        textInput.focus();
+    </script>
+</body>
+</html>
+    

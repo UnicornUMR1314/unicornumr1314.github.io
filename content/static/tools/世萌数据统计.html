@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>世萌数据统计工具</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Tailwind配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4F46E5',
+                        secondary: '#10B981',
+                        neutral: '#1F2937',
+                        warning: '#F59E0B',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .transition-smooth {
+                transition: all 0.3s ease-in-out;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <!-- 页面标题 -->
+        <header class="text-center mb-10">
+            <h1 class="text-[clamp(1.8rem,5vw,3rem)] font-bold text-neutral mb-2">
+                <i class="fa fa-bar-chart text-primary mr-3"></i>世萌数据统计工具
+            </h1>
+            <p class="text-gray-600 text-lg">统计文本中被[[]]标记的内容出现频率</p>
+        </header>
+        
+        <!-- 主内容区和打赏区容器 -->
+        <div class="flex flex flex-col md:flex-row gap-6 mb-8">
+            <!-- 主内容区 -->
+            <main class="bg-white rounded-xl-xl-xl shadow-lg p-6 md:p-8 flex-1">
+                <!-- 文本输入区域 -->
+                <div class="mb-8">
+                    <label for="text-input" class="block text-gray-700 font-medium mb-3 text-lg">请输入或粘贴文本：</label>
+                    <div class="relative">
+                        <textarea 
+                            id="text-input" 
+                            class="w-full h-48 p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-smooth resize-none"
+                            placeholder="在此粘贴需要统计的文本，例如：擂台 1 [[后藤独]] 千早爱音 
+擂台 2 八奈见杏菜 [[安和昴]] 
+擂台 3 [[温水和彦]] 藤丸立香 
+……
+ 
+Voter Id: ee4933a7-e81d-487d-b09d-0c356d8f5a5d 这是一个[[示例]]文本..."
+                        ></textarea>
+                        <button 
+                            id="clear-btn" 
+                            class="absolute right-3 top-3 text-gray-400 hover:text-gray-600 transition-smooth"
+                            title="清空"
+                        >
+                            <i class="fa fa-times-circle text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 操作按钮 -->
+                <div class="flex flex-col sm:flex-row gap-4 mb-8">
+                    <button 
+                        id="stats-btn" 
+                        class="flex-1 bg-primary hover:bg-primary/90 text-white font-semibold py-3 px-6 rounded-lg transition-smooth flex items-center justify-center"
+                    >
+                        <i class="fa fa-check-circle mr-2"></i>确认统计
+                    </button>
+                    <button 
+                        id="download-btn" 
+                        class="flex-1 bg-secondary hover:bg-secondary/90 text-white font-semibold py-3 px-6 rounded-lg transition-smooth flex items-center justify-center"
+                    >
+                        <i class="fa fa-download mr-2"></i>下载统计结果
+                    </button>
+                </div>
+                
+                <!-- 统计结果预览 -->
+                <div class="mt-8">
+                    <h2 class="text-xl font-semibold text-gray-700 mb-4 flex items-center">
+                        <i class="fa fa-list-alt text-primary mr-2"></i>统计结果预览
+                    </h2>
+                    <div id="stats-preview" class="border border-gray-200 rounded-lg p-4 max-h-64 overflow-y-auto bg-gray-50">
+                        <p class="text-gray-500 italic text-center py-8">暂无统计数据，请输入文本并点击"确认统计"</p>
+                    </div>
+                </div>
+            </main>
+            
+            <!-- 打赏区域 -->
+            <div class="md:w-64 flex-shrink-0">
+                <div class="bg-white rounded-xl shadow-lg p-6 h-full flex flex-col items-center justify-center">
+                    <!-- 打赏提示文字（已加大字体） -->
+                    <p class="text-gray-700 text-center text-base md:text-lg font-medium mb-4">
+                        如果我的工作对你有所帮助，可以打赏我杯奶茶吗
+                    </p>
+                    
+                    <!-- 二维码图片（请在此处添加图片链接） -->
+                    <div class="w-full mb-4 flex justify-center">
+                        <img 
+                            src="../alipay.jpg" 
+                            alt="打赏二维码" 
+                            class="w-48 h-48 object-contain border border-gray-200 rounded-lg p-2"
+                        >
+                    </div>
+                    
+                    <!-- 联系信息 -->
+                    <p class="text-gray-700 text-center text-sm md:text-base">
+                        如有类似的脚本定制需求可以联系我<br>
+                        QQ: 2732835242
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 提示信息 -->
+        <div id="notification" class="fixed bottom-6 right-6 px-6 py-3 rounded-lg shadow-lg transform translate-y-20 opacity-0 transition-smooth pointer-events-none"></div>
+        
+        <!-- 页脚 -->
+        <footer class="text-center text-gray-500 text-sm">
+            <p>© 2023 世萌数据统计工具 | 设计与开发</p>
+        </footer>
+    </div>
+
+    <script>
+        // 存储统计结果的字典
+        let statsDictionary = {};
+        // 存储已出现过的Voter ID
+        let usedVoterIds = [];
+        
+        // DOM元素
+        const textInput = document.getElementById('text-input');
+        const statsBtn = document.getElementById('stats-btn');
+        const downloadBtn = document.getElementById('download-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const statsPreview = document.getElementById('stats-preview');
+        const notification = document.getElementById('notification');
+        
+        // 显示通知
+        function showNotification(message, type = 'success') {
+            notification.textContent = message;
+            notification.className = 'fixed bottom-6 right-6 px-6 py-3 rounded-lg shadow-lg transform translate-y-0 opacity-100 transition-smooth';
+            
+            switch(type) {
+                case 'success':
+                    notification.classList.add('bg-green-500', 'text-white');
+                    break;
+                case 'error':
+                    notification.classList.add('bg-red-500', 'text-white');
+                    break;
+                case 'warning':
+                    notification.classList.add('bg-warning', 'text-white');
+                    break;
+            }
+            
+            setTimeout(() => {
+                notification.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+        
+        // 提取文本中的[[内容]]
+        function extractTags(text) {
+            const regex = /\[\[(.*?)\]\]/g;
+            const matches = [];
+            let match;
+            
+            while ((match = regex.exec(text)) !== null) {
+                matches.push(match[1]);
+            }
+            
+            return matches;
+        }
+        
+        // 提取Voter Id - 已更新以支持连字符格式
+        function extractVoterId(text) {
+            // 匹配格式: Voter Id: 后跟包含字母、数字和连字符的ID
+            const regex = /Voter Id: ([a-f0-9-]+)/i;
+            const match = text.match(regex);
+            return match ? match[1] : null;
+        }
+        
+        // 检查Voter Id是否已存在
+        function isVoterIdDuplicate(voterId) {
+            if (!voterId) return false;
+            return usedVoterIds.includes(voterId);
+        }
+        
+        // 更新统计字典
+        function updateStats(tags) {
+            tags.forEach(tag => {
+                if (statsDictionary.hasOwnProperty(tag)) {
+                    statsDictionary[tag]++;
+                } else {
+                    statsDictionary[tag] = 1;
+                }
+            });
+        }
+        
+        // 更新统计结果预览
+        function updateStatsPreview() {
+            if (Object.keys(statsDictionary).length === 0) {
+                statsPreview.innerHTML = '<p class="text-gray-500 italic text-center py-8">暂无统计数据，请输入文本并点击"确认统计"</p>';
+                return;
+            }
+            
+            // 按出现次数排序（降序）
+            const sortedEntries = Object.entries(statsDictionary).sort((a, b) => b[1] - a[1]);
+            
+            let html = '<div class="grid grid-cols-1 md:grid-cols-2 gap-2">';
+            sortedEntries.forEach(([tag, count]) => {
+                html += `
+                    <div class="flex justify-between items-center p-2 hover:bg-gray-100 rounded transition-smooth">
+                        <span class="font-medium">[[${tag}]]</span>
+                        <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">${count}</span>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            
+            statsPreview.innerHTML = html;
+        }
+        
+        // 处理统计按钮点击
+        statsBtn.addEventListener('click', () => {
+            const text = textInput.value.trim();
+            
+            if (!text) {
+                showNotification('请输入或粘贴文本后再进行统计', 'error');
+                return;
+            }
+            
+            // 提取并检查Voter Id
+            const voterId = extractVoterId(text);
+            
+            if (voterId) {
+                if (isVoterIdDuplicate(voterId)) {
+                    // 检测到重复的Voter Id，显示提醒并清空输入框
+                    showNotification(`警告：Voter Id ${voterId} 已出现过！`, 'warning');
+                    
+                    // 清空输入框
+                    textInput.value = '';
+                    textInput.focus();
+                    
+                    // 不执行后续统计操作
+                    return;
+                } else {
+                    // 新的Voter Id，添加到已使用列表
+                    usedVoterIds.push(voterId);
+                }
+            } else {
+                showNotification('未检测到有效的Voter Id格式（应为类似ee4933a7-e81d-487d-b09d-0c356d8f5a5a的格式）', 'warning');
+            }
+            
+            // 提取标签并更新统计
+            const tags = extractTags(text);
+            
+            if (tags.length === 0) {
+                showNotification('未找到任何[[标记]]内容', 'error');
+                return;
+            }
+            
+            updateStats(tags);
+            updateStatsPreview();
+            
+            // 清空输入框
+            textInput.value = '';
+            textInput.focus();
+            
+            showNotification(`成功统计到 ${tags.length} 个标记内容`);
+        });
+        
+        // 清空按钮点击事件
+        clearBtn.addEventListener('click', () => {
+            textInput.value = '';
+            textInput.focus();
+        });
+        
+        // 获取当前日期（YYYYMMDD格式）
+        function getCurrentDate() {
+            const date = new Date();
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}${month}${day}`;
+        }
+        
+        // 下载统计结果
+        downloadBtn.addEventListener('click', () => {
+            if (Object.keys(statsDictionary).length === 0) {
+                showNotification('暂无统计数据可下载', 'error');
+                return;
+            }
+            
+            // 准备文件内容
+            let fileContent = '世萌数据统计结果\n';
+            fileContent += `统计日期: ${new Date().toLocaleString()}\n`;
+            fileContent += `总投票人数: ${usedVoterIds.length}\n\n`;
+            
+            // 按出现次数排序
+            const sortedEntries = Object.entries(statsDictionary).sort((a, b) => b[1] - a[1]);
+            
+            sortedEntries.forEach(([tag, count]) => {
+                fileContent += `[[${tag}]]: ${count}\n`;
+            });
+            
+            // 创建文件并下载
+            const blob = new Blob([fileContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `世萌${getCurrentDate()}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            
+            // 清理
+            setTimeout(() => {
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }, 0);
+            
+            showNotification('统计结果已成功下载');
+        });
+        
+        // 初始化
+        updateStatsPreview();
+        textInput.focus();
+    </script>
+</body>
+</html>
+    
