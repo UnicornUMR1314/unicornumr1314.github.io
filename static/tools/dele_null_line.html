@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>删除 DOCX 空行（网页版）</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/pizzip@3.1.1/dist/pizzip.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#2563EB',
+            secondary: '#10B981',
+            neutral: '#111827',
+            danger: '#DC2626'
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .transition-smooth {
+        transition: all 0.25s ease;
+      }
+    }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen font-sans">
+  <div class="container mx-auto px-4 py-8 max-w-4xl">
+    <header class="text-center mb-8">
+      <h1 class="text-[clamp(1.8rem,4vw,2.6rem)] font-bold text-neutral mb-3">
+        <i class="fa fa-file-word-o text-primary mr-3"></i>删除 DOCX 空行（网页版）
+      </h1>
+      <p class="text-gray-600">
+        在浏览器中选择 .docx 文件，自动删除空段落并下载清理后的文档。
+      </p>
+    </header>
+
+    <main class="bg-white rounded-xl shadow-lg p-6 md:p-8 space-y-8">
+      <section>
+        <label class="block text-gray-700 font-medium mb-3 text-lg">选择 .docx 文件：</label>
+        <div id="drop-area" class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center bg-gray-50 cursor-pointer transition-smooth hover:border-primary hover:bg-blue-50">
+          <i class="fa fa-cloud-upload text-5xl text-gray-400 mb-4"></i>
+          <p class="text-gray-700 mb-2">拖拽文件到此处，或点击选择</p>
+          <p class="text-gray-500 text-sm mb-4">仅支持 Office Word 文档：.docx</p>
+          <button id="select-file-btn" class="inline-flex items-center px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium transition-smooth hover:bg-primary/90">
+            <i class="fa fa-file-text-o mr-2"></i>选择文件
+          </button>
+          <input id="file-input" type="file" accept=".docx" class="hidden">
+          <p id="file-name" class="text-gray-500 text-sm mt-3"></p>
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <div id="status" class="hidden rounded-lg p-4 text-sm flex items-start gap-3">
+          <i id="status-icon" class="fa"></i>
+          <div>
+            <p id="status-title" class="font-semibold mb-1"></p>
+            <p id="status-text" class="text-gray-700"></p>
+          </div>
+        </div>
+
+        <div id="progress-container" class="hidden">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-gray-700 font-medium">处理进度</span>
+            <span id="progress-percent" class="text-primary font-semibold">0%</span>
+          </div>
+          <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+            <div id="progress-bar" class="h-full bg-primary rounded-full" style="width:0%"></div>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-4">
+          <button id="start-btn" class="flex-1 inline-flex items-center justify-center px-4 py-2 bg-primary text-white rounded-lg font-medium transition-smooth hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+            <i class="fa fa-play mr-2"></i>开始清理空行
+          </button>
+          <button id="download-btn" class="flex-1 inline-flex items-center justify-center px-4 py-2 bg-secondary text-white rounded-lg font-medium transition-smooth hover:bg-secondary/90 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+            <i class="fa fa-download mr-2"></i>下载清理后的文档
+          </button>
+        </div>
+      </section>
+
+      <section class="border-t pt-6">
+        <h2 class="text-lg font-semibold text-neutral mb-3">说明与限制</h2>
+        <ul class="list-disc list-inside text-sm text-gray-700 space-y-1">
+          <li>本工具会删除“文本内容为空”的段落，以减少文档中的多余空行。</li>
+          <li>处理逻辑参考本地版 <code>dele_null_line.py</code>，但基于浏览器实现，可能与桌面版效果略有差异。</li>
+          <li>所有处理均在本地浏览器完成，不会上传文件到服务器。</li>
+        </ul>
+      </section>
+    </main>
+
+    <footer class="mt-10 text-center text-gray-400 text-xs">
+      <p>© 删除 DOCX 空行（网页版）</p>
+    </footer>
+  </div>
+
+  <script>
+    var dropArea = document.getElementById('drop-area');
+    var fileInput = document.getElementById('file-input');
+    var selectFileBtn = document.getElementById('select-file-btn');
+    var fileNameEl = document.getElementById('file-name');
+    var startBtn = document.getElementById('start-btn');
+    var downloadBtn = document.getElementById('download-btn');
+    var statusBox = document.getElementById('status');
+    var statusIcon = document.getElementById('status-icon');
+    var statusTitle = document.getElementById('status-title');
+    var statusText = document.getElementById('status-text');
+    var progressContainer = document.getElementById('progress-container');
+    var progressBar = document.getElementById('progress-bar');
+    var progressPercent = document.getElementById('progress-percent');
+
+    var currentFile = null;
+    var outputBlob = null;
+
+    function setStatus(type, title, text) {
+      statusBox.classList.remove('hidden');
+      statusBox.classList.remove('bg-blue-50', 'bg-green-50', 'bg-red-50', 'text-blue-700', 'text-green-700', 'text-red-700');
+      statusIcon.className = 'fa mt-1';
+      if (type === 'info') {
+        statusBox.classList.add('bg-blue-50', 'text-blue-700');
+        statusIcon.classList.add('fa-info-circle');
+      } else if (type === 'success') {
+        statusBox.classList.add('bg-green-50', 'text-green-700');
+        statusIcon.classList.add('fa-check-circle');
+      } else if (type === 'error') {
+        statusBox.classList.add('bg-red-50', 'text-red-700');
+        statusIcon.classList.add('fa-exclamation-circle');
+      }
+      statusTitle.textContent = title;
+      statusText.textContent = text;
+    }
+
+    function setProgress(value) {
+      var v = Math.min(100, Math.max(0, value));
+      progressContainer.classList.remove('hidden');
+      progressBar.style.width = v + '%';
+      progressPercent.textContent = v + '%';
+    }
+
+    function resetProgress() {
+      progressContainer.classList.add('hidden');
+      progressBar.style.width = '0%';
+      progressPercent.textContent = '0%';
+    }
+
+    function handleFileSelect(file) {
+      currentFile = file;
+      outputBlob = null;
+      fileNameEl.textContent = file ? ('已选择文件：' + file.name) : '';
+      startBtn.disabled = !file;
+      downloadBtn.disabled = true;
+      resetProgress();
+      if (file) {
+        setStatus('info', '等待处理', '点击“开始清理空行”按钮开始处理该文档。');
+      }
+    }
+
+    selectFileBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      fileInput.click();
+    });
+
+    fileInput.addEventListener('change', function (e) {
+      var file = e.target.files[0];
+      if (file) {
+        if (!/\.docx$/i.test(file.name)) {
+          setStatus('error', '格式不支持', '请选择扩展名为 .docx 的 Word 文档。');
+          fileInput.value = '';
+          return;
+        }
+        handleFileSelect(file);
+      }
+    });
+
+    dropArea.addEventListener('dragover', function (e) {
+      e.preventDefault();
+      dropArea.classList.add('border-primary', 'bg-blue-50');
+    });
+
+    dropArea.addEventListener('dragleave', function (e) {
+      e.preventDefault();
+      dropArea.classList.remove('border-primary', 'bg-blue-50');
+    });
+
+    dropArea.addEventListener('drop', function (e) {
+      e.preventDefault();
+      dropArea.classList.remove('border-primary', 'bg-blue-50');
+      var file = e.dataTransfer.files[0];
+      if (file) {
+        if (!/\.docx$/i.test(file.name)) {
+          setStatus('error', '格式不支持', '请选择扩展名为 .docx 的 Word 文档。');
+          return;
+        }
+        fileInput.value = '';
+        handleFileSelect(file);
+      }
+    });
+
+    function getOutputName(name) {
+      if (!name) return 'cleaned.docx';
+      var idx = name.toLowerCase().lastIndexOf('.docx');
+      if (idx === -1) return name + '_cleaned.docx';
+      return name.slice(0, idx) + '_cleaned.docx';
+    }
+
+    function cleanDocx(arrayBuffer) {
+      var zip = new PizZip(arrayBuffer);
+      var docXmlFile = zip.file('word/document.xml');
+      if (!docXmlFile) {
+        throw new Error('未找到 Word 主文档内容（word/document.xml）。');
+      }
+      var docXml = docXmlFile.asText();
+      var parser = new DOMParser();
+      var xmlDoc = parser.parseFromString(docXml, 'application/xml');
+      var ns = 'http://schemas.openxmlformats.org/wordprocessingml/2006/main';
+      var paragraphs = Array.prototype.slice.call(xmlDoc.getElementsByTagNameNS(ns, 'p'));
+      for (var i = 0; i < paragraphs.length; i++) {
+        var p = paragraphs[i];
+        if (!p || !p.parentNode) continue;
+        var texts = Array.prototype.slice.call(p.getElementsByTagNameNS(ns, 't'));
+        var combined = '';
+        for (var j = 0; j < texts.length; j++) {
+          combined += texts[j].textContent || '';
+        }
+        if (combined.trim() === '') {
+          p.parentNode.removeChild(p);
+        }
+      }
+      var serializer = new XMLSerializer();
+      var newXml = serializer.serializeToString(xmlDoc);
+      zip.file('word/document.xml', newXml);
+      return zip.generateAsync({
+        type: 'blob',
+        mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+      });
+    }
+
+    startBtn.addEventListener('click', function () {
+      if (!currentFile) {
+        setStatus('error', '未选择文件', '请先选择需要处理的 .docx 文件。');
+        return;
+      }
+      startBtn.disabled = true;
+      downloadBtn.disabled = true;
+      setStatus('info', '处理中', '正在清理空行，请稍候…');
+      setProgress(10);
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        setProgress(40);
+        var arrayBuffer = e.target.result;
+        cleanDocx(arrayBuffer).then(function (blob) {
+          outputBlob = blob;
+          setProgress(100);
+          setStatus('success', '处理完成', '已生成清理后的文档，点击“下载清理后的文档”保存。');
+          downloadBtn.disabled = false;
+          startBtn.disabled = false;
+        }).catch(function (err) {
+          console.error(err);
+          setStatus('error', '处理失败', err && err.message ? err.message : '处理过程中发生未知错误。');
+          resetProgress();
+          startBtn.disabled = false;
+        });
+      };
+      reader.onerror = function () {
+        setStatus('error', '读取失败', '无法读取该文件，请确认文件未损坏。');
+        resetProgress();
+        startBtn.disabled = false;
+      };
+      reader.readAsArrayBuffer(currentFile);
+    });
+
+    downloadBtn.addEventListener('click', function () {
+      if (!outputBlob) return;
+      var a = document.createElement('a');
+      var url = URL.createObjectURL(outputBlob);
+      a.href = url;
+      a.download = getOutputName(currentFile && currentFile.name);
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(function () {
+        URL.revokeObjectURL(url);
+      }, 2000);
+    });
+  </script>
+</body>
+</html>
+
