@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>源码合并为 Word（去空行，软著专用）</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <script src="https://unpkg.com/docx@7.8.2/build/index.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#165DFF',
+            secondary: '#36CFC9',
+            neutral: '#1D2129',
+            danger: '#DC2626'
+          },
+          fontFamily: {
+            inter: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      }
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto { content-visibility: auto; }
+      .transition-smooth { transition: all .25s ease; }
+    }
+  </style>
+</head>
+<body class="font-inter bg-gray-50 text-neutral min-h-screen">
+  <header class="bg-white shadow-sm sticky top-0 z-50">
+    <div class="container mx-auto px-4 py-4 flex items-center justify-between">
+      <div class="flex items-center space-x-2">
+        <i class="fa fa-file-word-o text-primary text-2xl"></i>
+        <h1 class="text-xl font-bold text-primary">源码合并为 Word（去空行）</h1>
+      </div>
+    </div>
+  </header>
+
+  <main class="container mx-auto px-4 py-8 max-w-4xl">
+    <section class="bg-white rounded-xl shadow-md p-6 md:p-8 space-y-6">
+      <div>
+        <label class="block text-gray-700 font-medium mb-2">页眉文本：</label>
+        <input id="header-input" type="text" placeholder="例如：软件著作权-源代码文档"
+               class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-smooth" />
+        <p class="text-gray-500 text-sm mt-1">将显示在每页上方，适合填写软著申请相关信息。</p>
+      </div>
+
+      <div>
+        <label class="block text-gray-700 font-medium mb-2">选择需要合并的源文件（可多选）：</label>
+        <div id="drop-area" class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center bg-neutral/5 cursor-pointer transition-smooth hover:border-primary hover:bg-blue-50">
+          <i class="fa fa-cloud-upload text-5xl text-gray-400 mb-4"></i>
+          <p class="text-gray-700 mb-2">拖放文件到此处，或点击选择</p>
+          <p class="text-gray-500 text-sm mb-4">将按所选文件的名称排序合并，自动移除空行</p>
+          <button id="select-btn" class="inline-flex items-center px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium transition-smooth hover:bg-primary/90">
+            <i class="fa fa-files-o mr-2"></i>选择文件
+          </button>
+          <input id="file-input" type="file" multiple class="hidden" />
+          <p id="file-summary" class="text-gray-500 text-sm mt-3"></p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-gray-700 font-medium mb-2">起始文件：</label>
+          <select id="start-file-select" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-smooth" disabled>
+            <option value="">不指定（按排序首个）</option>
+          </select>
+          <label class="inline-flex items-center gap-2 mt-3 text-sm text-gray-700">
+            <input id="page-breaks" type="checkbox" checked class="rounded">
+            <span>文件之间插入分页</span>
+          </label>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-4 md:items-end">
+        <button id="generate-btn" class="flex-1 inline-flex items-center justify-center px-4 py-3 bg-primary text-white rounded-lg font-semibold transition-smooth hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+          <i class="fa fa-play mr-2"></i>生成 Word 文档
+        </button>
+        <button id="download-btn" class="flex-1 inline-flex items-center justify-center px-4 py-3 bg-secondary text-white rounded-lg font-semibold transition-smooth hover:bg-secondary/90 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+          <i class="fa fa-download mr-2"></i>下载生成的文档
+        </button>
+        </div>
+      </div>
+
+      <div id="status" class="hidden rounded-lg p-4 text-sm flex items-start gap-3">
+        <i id="status-icon" class="fa mt-1"></i>
+        <div>
+          <p id="status-title" class="font-semibold mb-1"></p>
+          <p id="status-text" class="text-gray-700"></p>
+        </div>
+      </div>
+
+      <div id="progress-container" class="hidden">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-gray-700 font-medium">处理进度</span>
+          <span id="progress-percent" class="text-primary font-semibold">0%</span>
+        </div>
+        <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+          <div id="progress-bar" class="h-full bg-primary rounded-full" style="width:0%"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="max-w-4xl mx-auto bg-white rounded-xl shadow-md p-6 md:p-8 mt-8">
+      <h2 class="text-lg font-bold text-neutral mb-3">设置与规则</h2>
+      <ul class="list-disc list-inside text-sm text-gray-700 space-y-1">
+        <li>默认字体：宋体（SimSun），字号：10 磅（相当于 20 半磅）。</li>
+        <li>合并时移除所有空行（仅包含空白字符的行也视为空行）。</li>
+        <li>按文件名排序合并，逐行写入 Word 段落。</li>
+        <li>页眉使用你上面填写的文本，显示在每一页顶部。</li>
+        <li>本工具用于软著申请时提交合格的源代码文档的快速生成。</li>
+        <li>所有处理在浏览器本地完成，不会上传你的文件。</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="text-center text-gray-400 text-xs py-8">
+    <p>© 源码合并为 Word（去空行，软著专用）</p>
+  </footer>
+
+  <script>
+    const dropArea = document.getElementById('drop-area');
+    const fileInput = document.getElementById('file-input');
+    const selectBtn = document.getElementById('select-btn');
+    const fileSummary = document.getElementById('file-summary');
+    const headerInput = document.getElementById('header-input');
+    const startFileSelect = document.getElementById('start-file-select');
+    const pageBreaks = document.getElementById('page-breaks');
+    const generateBtn = document.getElementById('generate-btn');
+    const downloadBtn = document.getElementById('download-btn');
+    const statusBox = document.getElementById('status');
+    const statusIcon = document.getElementById('status-icon');
+    const statusTitle = document.getElementById('status-title');
+    const statusText = document.getElementById('status-text');
+    const progressContainer = document.getElementById('progress-container');
+    const progressBar = document.getElementById('progress-bar');
+    const progressPercent = document.getElementById('progress-percent');
+
+    let selectedFiles = [];
+    let outputBlob = null;
+
+    function setStatus(type, title, text) {
+      statusBox.classList.remove('hidden');
+      statusBox.classList.remove('bg-blue-50','text-blue-700','bg-green-50','text-green-700','bg-red-50','text-red-700');
+      statusIcon.className = 'fa mt-1';
+      if (type === 'info') { statusBox.classList.add('bg-blue-50','text-blue-700'); statusIcon.classList.add('fa-info-circle'); }
+      if (type === 'success') { statusBox.classList.add('bg-green-50','text-green-700'); statusIcon.classList.add('fa-check-circle'); }
+      if (type === 'error') { statusBox.classList.add('bg-red-50','text-red-700'); statusIcon.classList.add('fa-exclamation-circle'); }
+      statusTitle.textContent = title;
+      statusText.textContent = text;
+    }
+    function setProgress(v){ progressContainer.classList.remove('hidden'); const p=Math.max(0,Math.min(100,v)); progressBar.style.width=p+'%'; progressPercent.textContent=p+'%'; }
+    function resetProgress(){ progressContainer.classList.add('hidden'); progressBar.style.width='0%'; progressPercent.textContent='0%'; }
+
+    function updateSummary() {
+      if (!selectedFiles.length) {
+        fileSummary.textContent = '';
+        generateBtn.disabled = true;
+        downloadBtn.disabled = true;
+        return;
+      }
+      const names = selectedFiles.map(f => f.name).sort((a,b)=>a.localeCompare(b));
+      fileSummary.textContent = `已选择 ${names.length} 个文件：` + names.join(', ');
+      generateBtn.disabled = false;
+      downloadBtn.disabled = true;
+      outputBlob = null;
+      startFileSelect.innerHTML = '<option value=\"\">不指定（按排序首个）</option>';
+      for (const n of names) {
+        const opt = document.createElement('option');
+        opt.value = n;
+        opt.textContent = n;
+        startFileSelect.appendChild(opt);
+      }
+      startFileSelect.disabled = false;
+    }
+
+    selectBtn.addEventListener('click', (e)=>{ e.preventDefault(); fileInput.click(); });
+    fileInput.addEventListener('change', (e)=>{ selectedFiles = Array.from(e.target.files || []); updateSummary(); });
+    dropArea.addEventListener('dragover', (e)=>{ e.preventDefault(); dropArea.classList.add('border-primary','bg-blue-50'); });
+    dropArea.addEventListener('dragleave', (e)=>{ e.preventDefault(); dropArea.classList.remove('border-primary','bg-blue-50'); });
+    dropArea.addEventListener('drop', (e)=>{
+      e.preventDefault();
+      dropArea.classList.remove('border-primary','bg-blue-50');
+      selectedFiles = Array.from(e.dataTransfer.files || []);
+      updateSummary();
+    });
+
+    function readTextFile(file){
+      return new Promise((resolve, reject)=>{
+        const reader = new FileReader();
+        reader.onload = e => resolve({ name: file.name, content: e.target.result || '' });
+        reader.onerror = () => reject(new Error('文件读取失败：' + file.name));
+        reader.readAsText(file);
+      });
+    }
+
+    function removeBlankLines(text){
+      return (text || '')
+        .replace(/\r\n/g, '\n')
+        .replace(/\r/g, '\n')
+        .split('\n')
+        .filter(line => line.replace(/\s+/g,'').length > 0);
+    }
+
+    async function buildDoc(groupedLines, headerText, insertPageBreaks){
+      const { Document, Packer, Paragraph, TextRun, Header, AlignmentType } = docx;
+      const children = [];
+      for (let gi=0; gi<groupedLines.length; gi++){
+        const lines = groupedLines[gi].lines;
+        for (let i=0;i<lines.length;i++){
+          const tr = new TextRun({
+            text: lines[i],
+            font: { name: 'SimSun', eastAsia: '宋体' },
+            size: 20
+          });
+          const p = new Paragraph({
+            children: [tr],
+            pageBreakBefore: insertPageBreaks && gi>0 && i===0 ? true : false
+          });
+          children.push(p);
+        }
+      }
+      const headerPara = new Paragraph({
+        alignment: AlignmentType.LEFT,
+        children: [
+          new TextRun({ text: headerText || '', font: { name: 'SimSun', eastAsia: '宋体' }, size: 20 })
+        ]
+      });
+      const doc = new Document({
+        sections: [{
+          headers: { default: new Header({ children: [headerPara] }) },
+          children
+        }]
+      });
+      return Packer.toBlob(doc);
+    }
+
+    generateBtn.addEventListener('click', async ()=>{
+      if (!selectedFiles.length){
+        setStatus('error','缺少文件','请先选择需要合并的源代码文件。');
+        return;
+      }
+      setStatus('info','处理中','正在读取文件并生成 Word 文档，请稍候…');
+      setProgress(10);
+      try{
+        let filesSorted = [...selectedFiles].sort((a,b)=>a.name.localeCompare(b.name));
+        const startName = (startFileSelect.value || '').trim();
+        if (startName) {
+          const idx = filesSorted.findIndex(f => f.name === startName);
+          if (idx > 0) {
+            const [sp] = filesSorted.splice(idx,1);
+            filesSorted = [sp, ...filesSorted];
+          }
+        }
+        const contents = [];
+        for (let i=0;i<filesSorted.length;i++){
+          const t = await readTextFile(filesSorted[i]);
+          contents.push(t);
+          setProgress(10 + Math.floor((i+1)/filesSorted.length*50));
+        }
+        const grouped = contents.map(it => ({ name: it.name, lines: removeBlankLines(it.content) }));
+        setProgress(70);
+        const headerText = headerInput.value || '';
+        outputBlob = await buildDoc(grouped, headerText, !!pageBreaks.checked);
+        setProgress(100);
+        setStatus('success','生成完成','已生成合并后的 Word 文档，可点击“下载生成的文档”保存。');
+        downloadBtn.disabled = false;
+      }catch(err){
+        console.error(err);
+        setStatus('error','生成失败', err && err.message ? err.message : '处理过程中发生错误。');
+        resetProgress();
+      }
+    });
+
+    downloadBtn.addEventListener('click', ()=>{
+      if (!outputBlob) return;
+      const a = document.createElement('a');
+      const url = URL.createObjectURL(outputBlob);
+      a.href = url;
+      a.download = 'source_merged_noblank.docx';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(()=>URL.revokeObjectURL(url), 1500);
+    });
+  </script>
+</body>
+</html>
